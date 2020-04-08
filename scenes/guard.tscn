@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://sprites/AH_SpriteSheet_People1.png" type="Texture" id=1]
+[ext_resource path="res://scripts/guard.gd" type="Script" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 8.0
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 50.0
+
+[node name="guard" type="KinematicBody2D"]
+position = Vector2( 271.732, 203.57 )
+collision_layer = 8
+collision_mask = 33
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="npc_sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+vframes = 4
+hframes = 3
+region_enabled = true
+region_rect = Rect2( 96, 64, 48, 64 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="detect_radius" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="detect_radius"]
+shape = SubResource( 2 )
+
+[node name="Inventory" type="Node" parent="."]
+
+[node name="sword dummy" type="Node" parent="Inventory"]
+[connection signal="area_entered" from="detect_radius" to="." method="_on_detect_radius_area_entered"]
+[connection signal="area_exited" from="detect_radius" to="." method="_on_detect_radius_area_exited"]

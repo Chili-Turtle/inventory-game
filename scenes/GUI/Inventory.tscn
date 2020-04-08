@@ -1,0 +1,48 @@
+[gd_scene format=2]
+
+[node name="Inventory" type="Panel"]
+self_modulate = Color( 0, 0.811765, 1, 1 )
+margin_left = 24.5483
+margin_top = 21.5546
+margin_right = 152.548
+margin_bottom = 164.555
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 117.0
+margin_bottom = 133.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Inventory_name" type="Label" parent="MarginContainer/HBoxContainer"]
+margin_right = 107.0
+margin_bottom = 14.0
+text = "Inventory"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="slots" type="GridContainer" parent="MarginContainer/HBoxContainer"]
+margin_top = 18.0
+margin_right = 107.0
+margin_bottom = 18.0
+columns = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}

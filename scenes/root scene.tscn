@@ -1,0 +1,184 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://scripts/root_scene.gd" type="Script" id=1]
+[ext_resource path="res://scenes/GUI/inventory_space.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/bar 1.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/guard.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scripts/path_creator.gd" type="Script" id=5]
+[ext_resource path="res://scenes/light_comb.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/dummy_light_sprite.tscn" type="PackedScene" id=7]
+[ext_resource path="res://sprites/lights/texture_white.jpg" type="Texture" id=8]
+[ext_resource path="res://scenes/debugging/debugging_panel.tscn" type="PackedScene" id=9]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 288.853, 169.637, 0, 0, 0, 0, 277.41, 137.948, 0, 0, 0, 0, 185.509, 140.967, 0, 0, 0, 0, 91.8546, 140.627, 0, 0, 0, 0, 88.5949, 205.727, 0, 0, 0, 0, 262.005, 205.287 )
+}
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 5, 5 )
+
+[node name="root scene" type="Node2D"]
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_vertical_guides_": [ -143.0 ]
+}
+
+[node name="bar 1" parent="." instance=ExtResource( 3 )]
+
+[node name="Path2D" type="Path2D" parent="bar 1/layer_1" index="0"]
+curve = SubResource( 1 )
+
+[node name="npc" parent="bar 1/layer_1" index="1"]
+position = Vector2( 268.448, 166.883 )
+patrole_path = NodePath("../Path2D")
+
+[node name="player" parent="bar 1/layer_1" index="2"]
+position = Vector2( 312.157, 134.081 )
+
+[node name="guard" parent="bar 1/layer_1" index="3" instance=ExtResource( 4 )]
+position = Vector2( 398.174, 202.387 )
+
+[node name="light_comb" parent="." instance=ExtResource( 6 )]
+position = Vector2( 112.252, 51.7488 )
+
+[node name="light_comb4" parent="." instance=ExtResource( 6 )]
+position = Vector2( 318.817, 52.3475 )
+
+[node name="light_comb5" parent="." instance=ExtResource( 6 )]
+position = Vector2( 400.245, 54.1437 )
+
+[node name="light_comb6" parent="." instance=ExtResource( 6 )]
+position = Vector2( 443.354, 54.1437 )
+
+[node name="light_comb7" parent="." instance=ExtResource( 6 )]
+position = Vector2( 168.534, 284.059 )
+
+[node name="light_comb8" parent="." instance=ExtResource( 6 )]
+position = Vector2( 70.3405, 284.658 )
+
+[node name="light_comb9" parent="." instance=ExtResource( 6 )]
+position = Vector2( 26.0339, 358.901 )
+
+[node name="light_comb10" parent="." instance=ExtResource( 6 )]
+position = Vector2( 240.981, 413.386 )
+
+[node name="light_comb11" parent="." instance=ExtResource( 6 )]
+position = Vector2( 321.81, 411.59 )
+
+[node name="light_comb12" parent="." instance=ExtResource( 6 )]
+position = Vector2( 19.4725, 238.31 )
+
+[node name="light_comb13" parent="." instance=ExtResource( 6 )]
+position = Vector2( 19.4725, 176.94 )
+
+[node name="light_comb2" parent="." instance=ExtResource( 6 )]
+position = Vector2( 436.204, 257.162 )
+
+[node name="light_comb3" parent="." instance=ExtResource( 6 )]
+position = Vector2( 386.432, 185.644 )
+
+[node name="light_comb14" parent="." instance=ExtResource( 6 )]
+position = Vector2( 23.6265, 110.736 )
+
+[node name="light_comb15" parent="." instance=ExtResource( 6 )]
+position = Vector2( 478.487, 307.482 )
+
+[node name="light_comb16" parent="." instance=ExtResource( 6 )]
+position = Vector2( 441.485, 411.269 )
+
+[node name="light_comb17" parent="." instance=ExtResource( 6 )]
+position = Vector2( 389.661, 412.46 )
+
+[node name="Sprite" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1227.62, 198.945 )
+normal_map = null
+
+[node name="scene_darkener" type="Light2D" parent="."]
+position = Vector2( 244.988, 203.698 )
+scale = Vector2( 1.08249, 0.976836 )
+texture = ExtResource( 8 )
+energy = 0.1
+mode = 2
+range_height = 2048.0
+shadow_color = Color( 0.45098, 0.45098, 0.45098, 1 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="debugging_panel" parent="CanvasLayer" instance=ExtResource( 9 )]
+
+[node name="inventory_space" parent="CanvasLayer" instance=ExtResource( 2 )]
+margin_bottom = 594.0
+
+[node name="Line2D" type="Line2D" parent="CanvasLayer/inventory_space"]
+width = 60.0
+joint_mode = 1
+sharp_limit = 10.0
+antialiased = true
+script = ExtResource( 5 )
+
+[node name="Line2D2" type="Line2D" parent="CanvasLayer/inventory_space"]
+position = Vector2( -67.5544, 333.095 )
+points = PoolVector2Array( 636.713, 93.0614, 825.517, 93.061, 825.517, 203.558, 934.657, 207.323, 933.261, 135.394 )
+width = 60.0
+script = ExtResource( 5 )
+
+[node name="notice_bar" type="ProgressBar" parent="CanvasLayer/inventory_space"]
+self_modulate = Color( 1, 0.843137, 0, 1 )
+margin_left = 50.3926
+margin_top = 20.8173
+margin_right = 123.393
+margin_bottom = 45.8173
+custom_colors/font_color = Color( 0.329412, 0.823529, 0.12549, 1 )
+value = 60.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/inventory_space/notice_bar"]
+margin_left = 77.2717
+margin_top = 6.48434
+margin_right = 183.272
+margin_bottom = 20.4843
+text = "detection/notice"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureProgress" type="TextureProgress" parent="CanvasLayer"]
+margin_left = 1470.96
+margin_top = 36.3813
+margin_right = 1532.96
+margin_bottom = 96.3813
+value = 32.0
+texture_progress = ExtResource( 8 )
+fill_mode = 4
+tint_under = Color( 0.0823529, 0.0823529, 0.0823529, 1 )
+tint_progress = Color( 0.12549, 0.756863, 0.168627, 1 )
+nine_patch_stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rect_1" type="KinematicBody2D" parent="."]
+position = Vector2( 295.952, 108.444 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="rect_1"]
+shape = SubResource( 2 )
+
+[node name="rect_2" type="KinematicBody2D" parent="."]
+position = Vector2( 295.952, 99.3096 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="rect_2"]
+shape = SubResource( 2 )
+
+[node name="rect_3" type="KinematicBody2D" parent="."]
+position = Vector2( 295.952, 89.1785 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="rect_3"]
+shape = SubResource( 2 )
+[connection signal="ready" from="." to="." method="_on_root_scene_ready"]
+
+[editable path="bar 1"]
+
+[editable path="bar 1/layer_1/npc"]

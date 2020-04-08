@@ -1,0 +1,146 @@
+extends KinematicBody2D
+
+var direction : Vector2 = Vector2()
+var velocity : Vector2 = Vector2()
+var speed = 50.0
+
+var inventory : Dictionary = {}
+var current_inventory_space : int = 0
+var max_inventory_space : int = 9
+
+var steal_target = null
+
+var can_steal = false
+var is_stealing = false
+
+var scent_collider : Array = []
+
+func _ready():
+	init_inventory()
+	pass
+
+
+func _physics_process(delta):
+	
+#
+	if $RayCast2D.is_colliding() == true:
+		print("you are colliding with %s" %$RayCast2D.get_collider().name)
+	
+	update()
+	direction.x = int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left"))
+	direction.y = int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up"))
+	
+	if Input.is_action_pressed("ui_right"):
+		$AnimationPlayer.play("player_walk_right")
+	elif Input.is_action_pressed("ui_left"):
+		$AnimationPlayer.play("player_walk_left")
+	elif Input.is_action_pressed("ui_up"):
+		$AnimationPlayer.play("player_walk_up")
+	elif Input.is_action_pressed("ui_down"):
+		$AnimationPlayer.play("player_walk_down")
+	else:
+		$AnimationPlayer.stop(false)
+	
+	velocity = move_and_slide(direction * speed)
+	pass
+
+
+func init_inventory():
+	for i in range(0, max_inventory_space + 1):
+		inventory[i] = null
+	pass
+
+func _on_pick_pocket_range_body_entered(body):
+	if body.is_in_group("stealable"):
+		can_steal = true
+		steal_target = body
+	pass
+	
+func _unhandled_input(event):
+	if event.is_action_pressed("interact") and can_steal == true:
+		if is_stealing == false:
+			print("can I activate you out of range?")
+			event_handler.emit_signal("pick_pocket_started", steal_target, self)
+			is_stealing = true
+		elif is_stealing == true:
+			cancel_stealing()
+	pass
+	
+func cancel_stealing():
+	event_handler.emit_signal("pick_pocket_ended", steal_target, self)
+	is_stealing = false
+	pass
+	
+func _on_pick_pocket_range_body_exited(body):
+	if body == steal_target:
+		cancel_stealing()
+		can_steal = false
+		steal_target = null
+	pass
+
+func add_item(item_name):
+	for key in inventory:
+		if inventory[key] == null:
+			inventory[key] = item_name
+			return
+	print("inventory is full")
+	pass
+	
+func remove_item(item_name):
+	var arr : Array = []
+	
+	for key in inventory:
+		if inventory[key] == item_name:
+			inventory.erase(key)
+			current_inventory_space -= 1
+		pass
+	pass
+
+
+func scent_path():
+	#leave area 2D behinde/collision shapes
+	#how do keep track of the collisions
+	#array?
+	#max_collision
+	#when standing,  still initiate the scent trail
+	
+	if scent_collider.size() >= 6:
+		if scent_collider[0] != null:
+			scent_collider[0].queue_free()
+			scent_collider.pop_front()
+		pass
+	
+	var scent = Area2D.new()
+	
+	scent.add_to_group("scent")
+	
+	
+	scent.collision_layer = 32
+	scent.collision_mask = 32
+	
+	get_viewport().add_child(scent)
+	
+	scent_collider.append(scent)
+	
+	var col = CollisionShape2D.new()
+	col.shape = RectangleShape2D.new()
+	
+	col.shape.extents = Vector2(5.0, 5.0)
+	
+	scent.add_child(col)
+	
+	scent.position = position
+	
+	#how to leave them behind?
+	#its a new classe where they expire after certain second
+	#or its spawed in a speciefic node and deletes the first child after some second
+	#or just keep track of the areas in an array, if the array is to big delete the first in the array
+	
+	
+	
+	pass
+
+
+func _on_scent_spawner_timeout():
+	scent_path()
+	pass

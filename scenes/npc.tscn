@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://sprites/AH_SpriteSheet_People1.png" type="Texture" id=1]
+[ext_resource path="res://scripts/npc.gd" type="Script" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 6.0
+
+[sub_resource type="Animation" id=2]
+resource_name = "test"
+length = 8.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 4, 5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 271.732, 203.57 ), Vector2( 271.732, 203.57 ), Vector2( 361.957, 203.57 ), Vector2( 361.957, 203.57 ) ]
+}
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 40.0
+
+[node name="npc" type="KinematicBody2D" groups=[
+"stealable",
+]]
+position = Vector2( 271.732, 203.57 )
+collision_layer = 8
+collision_mask = 9
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="npc_sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+vframes = 4
+hframes = 3
+region_enabled = true
+region_rect = Rect2( 144, 64, 48, 64 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/test = SubResource( 2 )
+
+[node name="sight" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="sight"]
+shape = SubResource( 3 )
+
+[node name="Inventory" type="Node" parent="."]
+
+[node name="sword dummy" type="Node" parent="Inventory"]
+[connection signal="body_entered" from="sight" to="." method="_on_sight_body_entered"]
+[connection signal="body_exited" from="sight" to="." method="_on_sight_body_exited"]
