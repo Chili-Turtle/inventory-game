@@ -41,7 +41,7 @@ func _physics_process(delta):
 	else:
 		$AnimationPlayer.stop(false)
 	
-	velocity = move_and_slide(direction * speed)
+	velocity = move_and_slide(direction.normalized() * speed)
 	pass
 
 

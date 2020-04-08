@@ -11,11 +11,13 @@ var velocity : Vector2
 
 var direction : Vector2
 
-var speed : float = 0.0 #20
+var speed : float = 20.0 #20
 
 var notice_value = 0
 
 var index = 0
+
+var sight_angle = 0.0
 
 var angle = 0
 
@@ -82,6 +84,7 @@ func remove_item(item_name):
 func _process(delta):
 	angle -= delta * 500.0
 	update()
+	set_animation()
 	
 	pass
 	
@@ -126,7 +129,27 @@ func _physics_process(delta):
 
 	velocity = move_and_slide(velocity)
 	pass
-	
+
+func set_animation():
+	print(rad2deg(direction.angle_to(Vector2.RIGHT)))
+	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= 45.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= -45.0:
+		$AnimationPlayer.play("npc_right")
+		sight_angle = 0.0
+	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= 180.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= 135.0 or \
+		rad2deg(direction.angle_to(Vector2.RIGHT)) <= -135.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= -180.0:
+		print(rad2deg(direction.angle_to(Vector2.RIGHT)))
+		sight_angle = 180
+		$AnimationPlayer.play("npc_left")
+	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= 135.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= 45.0:
+		print(rad2deg(direction.angle_to(Vector2.RIGHT)))
+		sight_angle = -90
+		$AnimationPlayer.play("npc_up")
+	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= -45.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= -135.0:
+		print(rad2deg(direction.angle_to(Vector2.RIGHT)))
+		sight_angle = 90
+		$AnimationPlayer.play("npc_down")
+	pass
+
 func get_ray_cast():
 	Physics2DServer.ray_shape_create()
 	
@@ -161,7 +184,7 @@ func _draw():
 	
 	
 	###---draw vision cone---###
-	draw_arc(to_local(position), 40.0, deg2rad(180+45), deg2rad(180-45), 10,Color.orange, 3.0, true)
+	draw_arc(to_local(position), 40.0, deg2rad(sight_angle+45), deg2rad(sight_angle-45), 10,Color.orange, 3.0, true)
 	
 	
 	###---this is for drawing the sight radius/form---###
@@ -176,13 +199,11 @@ func _draw():
 #	draw_colored_polygon(pool, Color.red)
 	pass
 
-
 func _on_sight_body_entered(body):
 	if body.is_in_group("player"):
 		player = body
 		pass
 	pass
-
 
 func _on_sight_body_exited(body):
 	player = null

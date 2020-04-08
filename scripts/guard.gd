@@ -28,12 +28,43 @@ func _physics_process(delta):
 	if last_scent != null:
 		direction = last_scent.position - position
 		direction = direction.normalized()
+		set_animation()
 	else:
 		direction = Vector2()
 		
 	velocity = direction * speed
 	
 	velocity = move_and_slide(velocity)
+	pass
+	
+func player_in_vision():
+#		if player != null:
+#			if position.angle_to_point(player.position) <= deg2rad(45) && position.angle_to_point(player.position) >= -deg2rad(45):
+#				var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
+##				print(ray.collider.name)
+#				if ray.collider.is_in_group("player"):
+#					print("player in sight %s" %rad2deg(position.angle_to_point(player.position)))
+#					if player.is_stealing == true:
+#						print("Hey what are you doing")
+#						player.cancel_stealing()
+	pass
+
+func set_animation():
+	print(rad2deg(direction.angle_to(Vector2.RIGHT)))
+	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= 45.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= -45.0:
+		$AnimationPlayer.play("guard_right")
+	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= 180.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= 135.0 or \
+		rad2deg(direction.angle_to(Vector2.RIGHT)) <= -135.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= -180.0:
+		print(rad2deg(direction.angle_to(Vector2.RIGHT)))
+		$AnimationPlayer.play("guard_left")
+	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= 135.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= 45.0:
+		print(rad2deg(direction.angle_to(Vector2.RIGHT)))
+		$AnimationPlayer.play("guard_up")
+	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= -45.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= -135.0:
+		print(rad2deg(direction.angle_to(Vector2.RIGHT)))
+		$AnimationPlayer.play("guard_down")
+	
+	
 	pass
 	
 func detect_scent_trail():
@@ -43,7 +74,7 @@ func detect_scent_trail():
 	#when visible, follow path
 	
 	if scent_path.size() <= 0:
-		target = position
+#		target = position
 		return
 		pass
 	#follow the area/scent which is nearest == follow path lagging behing
@@ -62,6 +93,7 @@ func detect_scent_trail():
 #		else: #delete the scent from the array if it isn't the furthest
 #			scent_path.erase(scent)
 		###------###
+		target = last_scent.position
 		
 		###---nearest point---###
 		if last_scent.position.distance_to(position) > scent.position.distance_to(position):
