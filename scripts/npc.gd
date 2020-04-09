@@ -11,7 +11,7 @@ var velocity : Vector2
 
 var direction : Vector2
 
-var speed : float = 20.0 #20
+#var speed : float = 0.0 #20
 
 var notice_value = 0
 
@@ -84,8 +84,6 @@ func remove_item(item_name):
 func _process(delta):
 	angle -= delta * 500.0
 	update()
-	set_animation()
-	
 	pass
 	
 func add_notice(value : float):
@@ -93,69 +91,26 @@ func add_notice(value : float):
 	pass
 	
 func _physics_process(delta):
-	if player != null:
-		if position.angle_to_point(player.position) <= deg2rad(45) && position.angle_to_point(player.position) >= -deg2rad(45):
-				var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
-#				print(ray.collider.name)
-				if ray.collider.is_in_group("player"):
-					print("player in sight %s" %rad2deg(position.angle_to_point(player.position)))
-					if player.is_stealing == true:
-						print("Hey what are you doing")
-						player.cancel_stealing()
-					#if is in sight don't let the player steal
-	
-	if patrole_path == null:
-		return
-	
-	direction = patrole_curve.get_point_position(index) - position
 
-	if patrole_curve.get_point_position(index).distance_to(position) <= 2.0:
-		index += 1
-		index = index % patrole_curve.get_point_count()
-
-	velocity = direction.normalized()
-	
-	if get_ray_cast() != null:
-		if !get_ray_cast().empty():
-			steering = (position - get_ray_cast().position).normalized() * 5.0
-			steering = Vector2().linear_interpolate(steering, delta * 15.0)
-	else:
-		steering = steering.linear_interpolate(Vector2(), delta * 5.0)
-#		steering = Vector2()
-
-	velocity += steering
-	
-	velocity = velocity.normalized() * speed
-
-	velocity = move_and_slide(velocity)
 	pass
 
-func set_animation():
-	print(rad2deg(direction.angle_to(Vector2.RIGHT)))
-	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= 45.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= -45.0:
-		$AnimationPlayer.play("npc_right")
-		sight_angle = 0.0
-	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= 180.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= 135.0 or \
-		rad2deg(direction.angle_to(Vector2.RIGHT)) <= -135.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= -180.0:
-		print(rad2deg(direction.angle_to(Vector2.RIGHT)))
-		sight_angle = 180
-		$AnimationPlayer.play("npc_left")
-	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= 135.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= 45.0:
-		print(rad2deg(direction.angle_to(Vector2.RIGHT)))
-		sight_angle = -90
-		$AnimationPlayer.play("npc_up")
-	if rad2deg(direction.angle_to(Vector2.RIGHT)) <= -45.0 && rad2deg(direction.angle_to(Vector2.RIGHT)) >= -135.0:
-		print(rad2deg(direction.angle_to(Vector2.RIGHT)))
-		sight_angle = 90
-		$AnimationPlayer.play("npc_down")
+func is_player_in_vision(): #this should be a bool
+	if player == null:
+		return
+		
+	if position.angle_to_point(player.position) <= deg2rad(45) && position.angle_to_point(player.position) >= -deg2rad(45):
+		var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
+		if ray.collider.is_in_group("player"):
+			if player.is_stealing == true:
+				print("Hey what are you doing")
+				player.cancel_stealing()
+				#add suspicion level if you have more then 2-3 all guard are immediately alerted
 	pass
 
 func get_ray_cast():
 	Physics2DServer.ray_shape_create()
-	
 	var space_state = get_world_2d().direct_space_state
 	var result = space_state.intersect_ray(position, position + (Vector2.UP * 30.0).rotated(deg2rad(angle)), [self], collision_mask)
-	
 	
 	if result.empty():
 		return
@@ -163,25 +118,13 @@ func get_ray_cast():
 	hit_point = result.position
 	
 	return result
-	#should I detect body by area entered or rotate the ray?
-	
-	#have a standart point of intrest
-	
-	#rotate the ray until it find an point of intrest
-	#if point of intrest is behind an object go to standart point of intrest without bumping into stuff
-	# (somewhat like stearing, but not that complex) current direction += steering
-
-	
 	pass
 
 func _draw():
-	
 	draw_circle(to_local(hit_point), 5.0, Color.blue)
 #	draw_circle(to_local(global_position), 5.0, Color.blue)
 	draw_line(to_local(position), (to_local(position) + Vector2.UP * ray_length).rotated(deg2rad(angle)), Color.red, 3.0, true)
 	draw_line(to_local(position), (to_local(position) + velocity), Color.green, 3.0, true)
-	
-	
 	
 	###---draw vision cone---###
 	draw_arc(to_local(position), 40.0, deg2rad(sight_angle+45), deg2rad(sight_angle-45), 10,Color.orange, 3.0, true)

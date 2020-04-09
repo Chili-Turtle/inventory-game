@@ -2,7 +2,6 @@ extends KinematicBody2D
 
 var direction : Vector2 = Vector2()
 var velocity : Vector2 = Vector2()
-var speed = 50.0
 
 var inventory : Dictionary = {}
 var current_inventory_space : int = 0
@@ -19,31 +18,10 @@ func _ready():
 	init_inventory()
 	pass
 
-
 func _physics_process(delta):
-	
-#
-	if $RayCast2D.is_colliding() == true:
-		print("you are colliding with %s" %$RayCast2D.get_collider().name)
-	
 	update()
-	direction.x = int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left"))
-	direction.y = int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up"))
 	
-	if Input.is_action_pressed("ui_right"):
-		$AnimationPlayer.play("player_walk_right")
-	elif Input.is_action_pressed("ui_left"):
-		$AnimationPlayer.play("player_walk_left")
-	elif Input.is_action_pressed("ui_up"):
-		$AnimationPlayer.play("player_walk_up")
-	elif Input.is_action_pressed("ui_down"):
-		$AnimationPlayer.play("player_walk_down")
-	else:
-		$AnimationPlayer.stop(false)
-	
-	velocity = move_and_slide(direction.normalized() * speed)
 	pass
-
 
 func init_inventory():
 	for i in range(0, max_inventory_space + 1):
@@ -98,12 +76,6 @@ func remove_item(item_name):
 
 
 func scent_path():
-	#leave area 2D behinde/collision shapes
-	#how do keep track of the collisions
-	#array?
-	#max_collision
-	#when standing,  still initiate the scent trail
-	
 	if scent_collider.size() >= 6:
 		if scent_collider[0] != null:
 			scent_collider[0].queue_free()
@@ -113,7 +85,6 @@ func scent_path():
 	var scent = Area2D.new()
 	
 	scent.add_to_group("scent")
-	
 	
 	scent.collision_layer = 32
 	scent.collision_mask = 32
@@ -130,16 +101,7 @@ func scent_path():
 	scent.add_child(col)
 	
 	scent.position = position
-	
-	#how to leave them behind?
-	#its a new classe where they expire after certain second
-	#or its spawed in a speciefic node and deletes the first child after some second
-	#or just keep track of the areas in an array, if the array is to big delete the first in the array
-	
-	
-	
 	pass
-
 
 func _on_scent_spawner_timeout():
 	scent_path()

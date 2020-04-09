@@ -1,7 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://sprites/AH_SpriteSheet_People1.png" type="Texture" id=1]
 [ext_resource path="res://scripts/player_controller.gd" type="Script" id=2]
+[ext_resource path="res://scripts/state machine/state_machine.gd" type="Script" id=3]
+[ext_resource path="res://scripts/state machine/player_states/player_idle.gd" type="Script" id=4]
+[ext_resource path="res://scripts/state machine/player_states/player_walk.gd" type="Script" id=5]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 6.0
@@ -72,7 +75,7 @@ tracks/0/keys = {
 }
 
 [sub_resource type="CircleShape2D" id=6]
-radius = 20.0
+radius = 30.0
 
 [node name="player" type="KinematicBody2D" groups=[
 "player",
@@ -108,8 +111,15 @@ shape = SubResource( 6 )
 wait_time = 0.5
 autostart = true
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
-rotation = 3.14159
+[node name="state_machine" type="Node" parent="."]
+script = ExtResource( 3 )
+start_state = NodePath("idle")
+
+[node name="idle" type="Node" parent="state_machine"]
+script = ExtResource( 4 )
+
+[node name="move" type="Node" parent="state_machine"]
+script = ExtResource( 5 )
 [connection signal="body_entered" from="pick_pocket_range" to="." method="_on_pick_pocket_range_body_entered"]
 [connection signal="body_exited" from="pick_pocket_range" to="." method="_on_pick_pocket_range_body_exited"]
 [connection signal="timeout" from="scent_spawner" to="." method="_on_scent_spawner_timeout"]
