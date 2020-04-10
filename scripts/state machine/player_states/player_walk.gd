@@ -25,7 +25,8 @@ func update(_delta : float):
 	else:
 		owner.get_node("state_machine").change_state("idle")
 	
-	owner.velocity = owner.move_and_slide(owner.direction.normalized() * speed)
+	
+	owner.direction = owner.direction.normalized() * speed
 	pass
 
 func handle_input(_event):

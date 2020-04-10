@@ -21,6 +21,10 @@ var sight_angle = 0.0
 
 var angle = 0
 
+var pocket_color : Color = Color(0.2, 0.6, 0.0, 0.3)
+var transparent_color : Color = Color(0.0, 0.0, 0.0, 0.0)
+var current_color : Color
+
 var player = null
 
 var hit_point = Vector2()
@@ -32,7 +36,7 @@ export(NodePath) var patrole_path = null
 var patrole_curve : Curve2D
 
 func _ready():
-	
+	current_color = transparent_color
 #	print("this is the path: %s " %to_global($Path2D.get_curve().get_point_position(0)))
 #	print("this is the path: %s " %get_node(patrole_path).get_curve().get_point_position(0))
 	if patrole_path != null:
@@ -82,28 +86,39 @@ func remove_item(item_name):
 	pass
 
 func _process(delta):
+	
+	if player != null:
+		current_color = current_color.linear_interpolate(pocket_color, delta * 10.0)
+	else:
+		current_color = current_color.linear_interpolate(transparent_color, delta * 10.0)
+	
 	angle -= delta * 500.0
 	update()
+	is_player_in_vision()
 	pass
 	
 func add_notice(value : float):
 	notice_value += value
 	pass
 	
-func _physics_process(delta):
-
-	pass
-
 func is_player_in_vision(): #this should be a bool
 	if player == null:
 		return
-		
-	if position.angle_to_point(player.position) <= deg2rad(45) && position.angle_to_point(player.position) >= -deg2rad(45):
+	
+	#if left and between 45, -45
+	#if right and between 135 and -135
+	#if down and between -45, -135
+	#if up and between 45, 135
+	
+	 #0.0 when right 180 when left, when npc is left == 0.0, when npc is right 180
+	if player.position.angle_to_point(position) <= deg2rad(sight_angle + 45) && player.position.angle_to_point(position) >= deg2rad(sight_angle - 45):
 		var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
-		if ray.collider.is_in_group("player"):
-			if player.is_stealing == true:
-				print("Hey what are you doing")
-				player.cancel_stealing()
+#		print("in vision cone")
+		if !ray.empty():
+			if ray.collider.is_in_group("player"):
+				if player.is_stealing == true:
+					player.cancel_stealing()
+					print("Hey what are you doing")
 				#add suspicion level if you have more then 2-3 all guard are immediately alerted
 	pass
 
@@ -121,13 +136,16 @@ func get_ray_cast():
 	pass
 
 func _draw():
-	draw_circle(to_local(hit_point), 5.0, Color.blue)
+#	draw_circle(to_local(hit_point), 5.0, Color.blue)
 #	draw_circle(to_local(global_position), 5.0, Color.blue)
-	draw_line(to_local(position), (to_local(position) + Vector2.UP * ray_length).rotated(deg2rad(angle)), Color.red, 3.0, true)
-	draw_line(to_local(position), (to_local(position) + velocity), Color.green, 3.0, true)
+#	draw_line(to_local(position), (to_local(position) + Vector2.UP * ray_length).rotated(deg2rad(angle)), Color.red, 3.0, true)
+#	draw_line(to_local(position), (to_local(position) + velocity), Color.green, 3.0, true)
 	
 	###---draw vision cone---###
-	draw_arc(to_local(position), 40.0, deg2rad(sight_angle+45), deg2rad(sight_angle-45), 10,Color.orange, 3.0, true)
+	draw_arc(to_local(position), 40.0, deg2rad(sight_angle + 45), deg2rad(sight_angle - 45), 10,Color.orange, 3.0, true) #0.0 when right 180 when left
+	
+	#make a extra node which draws the circl
+	draw_circle(to_local(position), 20.0, current_color)
 	
 	
 	###---this is for drawing the sight radius/form---###

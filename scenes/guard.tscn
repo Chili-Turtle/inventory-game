@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://sprites/AH_SpriteSheet_People1.png" type="Texture" id=1]
 [ext_resource path="res://scripts/guard.gd" type="Script" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://scripts/state machine/guard_states/guard_move.gd" type="Script" id=5]
 [ext_resource path="res://scripts/state machine/guard_behaviour/guard_chase.gd" type="Script" id=6]
 [ext_resource path="res://scripts/state machine/guard_behaviour/guard_seek.gd" type="Script" id=7]
+[ext_resource path="res://scripts/state machine/guard_behaviour/guard_patrol.gd" type="Script" id=8]
+[ext_resource path="res://sprites/AH_Sprite_People_1_normal_1.png" type="Texture" id=9]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 8.0
@@ -90,6 +92,7 @@ shape = SubResource( 1 )
 
 [node name="npc_sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
+normal_map = ExtResource( 9 )
 vframes = 4
 hframes = 3
 region_enabled = true
@@ -102,7 +105,6 @@ anims/guard_right = SubResource( 4 )
 anims/guard_up = SubResource( 5 )
 
 [node name="detect_radius" type="Area2D" parent="."]
-visible = false
 collision_layer = 16
 collision_mask = 32
 
@@ -114,7 +116,6 @@ shape = SubResource( 6 )
 [node name="sword dummy" type="Node" parent="Inventory"]
 
 [node name="player_detection" type="Area2D" parent="."]
-visible = false
 collision_layer = 16
 collision_mask = 2
 
@@ -123,7 +124,7 @@ shape = SubResource( 7 )
 
 [node name="state_machine" type="Node" parent="."]
 script = ExtResource( 3 )
-start_state = NodePath("idle")
+start_state = NodePath("move")
 
 [node name="idle" type="Node" parent="state_machine"]
 script = ExtResource( 4 )
@@ -133,9 +134,10 @@ script = ExtResource( 5 )
 
 [node name="behaviour_tree" type="Node" parent="."]
 script = ExtResource( 3 )
-start_state = NodePath("seek")
+start_state = NodePath("chase")
 
 [node name="patrol" type="Node" parent="behaviour_tree"]
+script = ExtResource( 8 )
 
 [node name="chase" type="Node" parent="behaviour_tree"]
 script = ExtResource( 6 )

@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "Item",
 "language": "GDScript",
 "path": "res://scripts/Inventory/item.gd"
+}, {
+"base": "Camera2D",
+"class": "ShakeCamera2D",
+"language": "GDScript",
+"path": "res://scripts/camera_controller.gd"
 } ]
 _global_script_class_icons={
-"Item": ""
+"Item": "",
+"ShakeCamera2D": ""
 }
 
 [application]

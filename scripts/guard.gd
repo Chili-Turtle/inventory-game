@@ -16,8 +16,17 @@ var sight_angle = 0.0
 
 var player = null
 
+var index = 0
+
+export(NodePath) var patrole_path = null
+
+var patrole_curve : Curve2D
+
 func _ready():
 	target = position
+	
+	if patrole_path != null:
+		patrole_curve = get_node(patrole_path).get_curve()
 	pass
 	
 func _process(delta):
@@ -25,6 +34,11 @@ func _process(delta):
 	pass
 	
 func _physics_process(delta):
+	#if patroling and player is in vision cone stealing, go to chase state
+	#if player is out of chase radius, go back to scent path
+	
+	#stand_still state
+	#if no scent is there stop, and turn/player left, right.. animation, and ajust the angle
 	pass
 	
 func player_in_vision_cone():

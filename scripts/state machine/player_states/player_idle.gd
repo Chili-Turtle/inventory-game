@@ -10,6 +10,7 @@ func exit():
 	pass
 	
 func update(_delta : float):
+	owner.direction = Vector2()
 	pass
 
 func handle_input(_event):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scripts/root_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/GUI/inventory_space.tscn" type="PackedScene" id=2]
@@ -9,10 +9,17 @@
 [ext_resource path="res://scenes/dummy_light_sprite.tscn" type="PackedScene" id=7]
 [ext_resource path="res://sprites/lights/texture_white.jpg" type="Texture" id=8]
 [ext_resource path="res://scenes/debugging/debugging_panel.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/GUI/dialogue.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scripts/camera_controller.gd" type="Script" id=11]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 288.853, 169.637, 0, 0, 0, 0, 277.41, 137.948, 0, 0, 0, 0, 185.509, 140.967, 0, 0, 0, 0, 91.8546, 140.627, 0, 0, 0, 0, 88.5949, 205.727, 0, 0, 0, 0, 262.005, 205.287 )
+}
+
+[sub_resource type="Curve2D" id=2]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 362.443, 206.595, 0, 0, 0, 0, 358.662, 287.897, 0, 0, 0, 0, 305.721, 286.007, 0, 0, 0, 0, 309.502, 84.3273, 0, 0, 0, 0, 354.88, 88.1088, 0, 0, 0, 0, 362.443, 206.595 )
 }
 
 [node name="root scene" type="Node2D"]
@@ -23,18 +30,22 @@ __meta__ = {
 
 [node name="bar 1" parent="." instance=ExtResource( 3 )]
 
-[node name="Path2D" type="Path2D" parent="bar 1/layer_1" index="0"]
+[node name="npc_1_path" type="Path2D" parent="bar 1/layer_1" index="0"]
 curve = SubResource( 1 )
 
-[node name="npc" parent="bar 1/layer_1" index="1"]
+[node name="guard_1_path" type="Path2D" parent="bar 1/layer_1" index="1"]
+curve = SubResource( 2 )
+
+[node name="npc" parent="bar 1/layer_1" index="2"]
 position = Vector2( 268.448, 166.883 )
-patrole_path = NodePath("../Path2D")
+patrole_path = NodePath("../npc_1_path")
 
-[node name="player" parent="bar 1/layer_1" index="2"]
-position = Vector2( 312.157, 134.081 )
+[node name="player" parent="bar 1/layer_1" index="3"]
+position = Vector2( 408.254, 70.3276 )
 
-[node name="guard" parent="bar 1/layer_1" index="3" instance=ExtResource( 4 )]
+[node name="guard" parent="bar 1/layer_1" index="4" instance=ExtResource( 4 )]
 position = Vector2( 374.398, 205.089 )
+patrole_path = NodePath("../guard_1_path")
 
 [node name="light_comb" parent="." instance=ExtResource( 6 )]
 position = Vector2( 112.252, 51.7488 )
@@ -87,10 +98,6 @@ position = Vector2( 441.485, 411.269 )
 [node name="light_comb17" parent="." instance=ExtResource( 6 )]
 position = Vector2( 389.661, 412.46 )
 
-[node name="Sprite" parent="." instance=ExtResource( 7 )]
-position = Vector2( 1227.62, 198.945 )
-normal_map = null
-
 [node name="scene_darkener" type="Light2D" parent="."]
 position = Vector2( 244.988, 203.698 )
 scale = Vector2( 1.08249, 0.976836 )
@@ -99,6 +106,10 @@ energy = 0.1
 mode = 2
 range_height = 2048.0
 shadow_color = Color( 0.45098, 0.45098, 0.45098, 1 )
+
+[node name="Sprite" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1239.59, 192.114 )
+normal_map = null
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -156,6 +167,18 @@ nine_patch_stretch = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="dialogue" parent="CanvasLayer" instance=ExtResource( 10 )]
+margin_left = -353.791
+margin_top = 47.9562
+margin_right = 358.209
+margin_bottom = 140.957
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 511.06, 297.069 )
+rotating = true
+current = true
+script = ExtResource( 11 )
 [connection signal="ready" from="." to="." method="_on_root_scene_ready"]
 
 [editable path="bar 1"]

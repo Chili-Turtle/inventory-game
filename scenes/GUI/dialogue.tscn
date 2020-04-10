@@ -1,0 +1,138 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scripts/GUI/dialogue.gd" type="Script" id=1]
+
+[sub_resource type="Animation" id=1]
+resource_name = "move_in"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 156, 623.727 ), Vector2( 156, 487.405 ) ]
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:rect_position:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 156, -0.25, 0, 0.18, -1.02881, 156, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.5 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath(".:rect_position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 623.727, -0.25, 0, 0.25, 0, 487.405, -0.26, -61.6803, 0.26, 61.6803 ),
+"times": PoolRealArray( 0, 0.5 )
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "move_out"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 156, 487.405 ), Vector2( 156, 623.727 ) ]
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:rect_position:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 156, -0.25, 0, 0.25, 0, 156, -0.25, 0, 0.18, -1.02881 ),
+"times": PoolRealArray( 0, 0.5 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath(".:rect_position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 487.405, -0.14, 129.221, 0.14, -129.221, 623.727, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.5 )
+}
+
+[node name="dialogue" type="Control"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -356.0
+margin_top = -112.595
+margin_right = 356.0
+margin_bottom = -19.5946
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 702.0
+margin_bottom = 83.0
+visible_characters = 0
+text = "This is a test dialogue Lorem ipsum style"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="end_dialogue" type="RichTextLabel" parent="MarginContainer/RichTextLabel"]
+visible = false
+margin_left = 633.0
+margin_top = 60.0
+margin_right = 690.0
+margin_bottom = 76.0
+text = "press E"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/move_in = SubResource( 1 )
+anims/move_out = SubResource( 2 )
+
+[node name="text_speed" type="Timer" parent="."]
+wait_time = 0.01
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="timeout" from="text_speed" to="." method="_on_text_speed_timeout"]

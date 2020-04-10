@@ -9,18 +9,31 @@ var max_inventory_space : int = 9
 
 var steal_target = null
 
+var knock_back_dir : Vector2
+
+var pocketing_range = 20.0
+
 var can_steal = false
 var is_stealing = false
 
 var scent_collider : Array = []
 
+var health : int
+var max_health : int = 3
+
 func _ready():
 	init_inventory()
+	health = max_health
 	pass
 
 func _physics_process(delta):
 	update()
 	
+	velocity = direction
+	velocity += knock_back_dir
+	velocity = move_and_slide(velocity)
+	
+	knock_back_dir = knock_back_dir.linear_interpolate(Vector2(), delta * 20.0)
 	pass
 
 func init_inventory():
@@ -37,7 +50,6 @@ func _on_pick_pocket_range_body_entered(body):
 func _unhandled_input(event):
 	if event.is_action_pressed("interact") and can_steal == true:
 		if is_stealing == false:
-			print("can I activate you out of range?")
 			event_handler.emit_signal("pick_pocket_started", steal_target, self)
 			is_stealing = true
 		elif is_stealing == true:
@@ -72,6 +84,28 @@ func remove_item(item_name):
 			inventory.erase(key)
 			current_inventory_space -= 1
 		pass
+	pass
+
+func take_damage(enemy, damage : int, force : float):
+	health -= damage
+	
+	knock_back(enemy, force)
+	
+	if health <= 0:
+		on_death()
+	pass
+	
+func on_death():
+	print("you are dead")
+	#player death animation
+	#restart the level
+	#send signal to the level root
+	pass
+	
+func knock_back(enemy, force = 0.0):
+	knock_back_dir
+	knock_back_dir = position - enemy.position
+	knock_back_dir = knock_back_dir.normalized() * force
 	pass
 
 
