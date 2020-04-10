@@ -19,7 +19,7 @@ _data = {
 
 [sub_resource type="Curve2D" id=2]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 362.443, 206.595, 0, 0, 0, 0, 358.662, 287.897, 0, 0, 0, 0, 305.721, 286.007, 0, 0, 0, 0, 309.502, 84.3273, 0, 0, 0, 0, 354.88, 88.1088, 0, 0, 0, 0, 362.443, 206.595 )
+"points": PoolVector2Array( 0, 0, 0, 0, 301.746, 204.597, 0, 0, 0, 0, 288.393, 206.075, 0, 0, 0, 0, 274.738, 199.735, 0, 0, 0, 0, 277.664, 128.047, 0, 0, 0, 0, 307.162, 115.612, 0, 0, 0, 0, 300.972, 201.501 )
 }
 
 [node name="root scene" type="Node2D"]
@@ -57,7 +57,7 @@ position = Vector2( 318.817, 52.3475 )
 position = Vector2( 400.245, 54.1437 )
 
 [node name="light_comb6" parent="." instance=ExtResource( 6 )]
-position = Vector2( 443.354, 54.1437 )
+position = Vector2( 439.178, 53.0499 )
 
 [node name="light_comb7" parent="." instance=ExtResource( 6 )]
 position = Vector2( 168.534, 284.059 )

@@ -1,6 +1,7 @@
 extends Node
 
 signal game_loaded()
+signal player_died()
 signal pick_pocket_started(npc_inventory, player_inventory)
 signal pick_pocket_ended(npc_inventory, player_inventory)
 

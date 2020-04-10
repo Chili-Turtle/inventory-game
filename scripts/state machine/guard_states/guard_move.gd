@@ -1,13 +1,13 @@
 extends "res://scripts/state machine/state.gd"
 
-var speed : float = 40.0
+var speed : float = 30.0
 
 func enter():
-	print("%s entered" %name)
+#	print("%s entered" %name)
 	pass
 	
 func exit():
-	print("%s entered" %name)
+#	print("%s entered" %name)
 	pass
 	
 func update(_delta : float):
@@ -17,6 +17,11 @@ func update(_delta : float):
 	owner.velocity = owner.move_and_slide(owner.velocity)
 	
 	pass
+	
+	
+#		if rad2deg(owner.direction.angle_to(Vector2.RIGHT)) <= 45.0 && rad2deg(owner.direction.angle_to(Vector2.RIGHT)) >= -45.0:
+#		owner.get_node("AnimationPlayer").play("npc_right")
+#		owner.sight_angle = 0.0
 
 func set_animation():
 	if rad2deg(owner.direction.angle_to(Vector2.RIGHT)) <= 45.0 && rad2deg(owner.direction.angle_to(Vector2.RIGHT)) >= -45.0:

@@ -1,11 +1,12 @@
 extends "res://scripts/state machine/state.gd"
 
 func enter():
-	print("%s entered" %name)
+#	print("%s entered" %name)
+	owner.get_node("state_machine").change_state("move")
 	pass
 	
 func exit():
-	print("%s entered" %name)
+#	print("%s entered" %name)
 	pass
 	
 func update(_delta : float):
@@ -24,7 +25,7 @@ func get_scent_direction():
 
 func detect_scent_trail():
 	if owner.scent_path.size() <= 0:
-#		target = position
+		owner.get_node("behaviour_tree").change_state("patrol")
 		return
 	
 	for scent in owner.scent_path:
@@ -50,5 +51,3 @@ func detect_scent_trail():
 		if owner.last_scent.position.distance_to(owner.position) <= 2.0:
 			owner.scent_path.erase(scent)
 			owner.last_scent = null
-			
-		owner.get_node("state_machine").change_state("move")

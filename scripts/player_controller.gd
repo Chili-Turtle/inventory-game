@@ -88,7 +88,8 @@ func remove_item(item_name):
 
 func take_damage(enemy, damage : int, force : float):
 	health -= damage
-	
+	#play damage aniamtion
+	#call to ui health -1 one
 	knock_back(enemy, force)
 	
 	if health <= 0:
@@ -97,6 +98,7 @@ func take_damage(enemy, damage : int, force : float):
 	
 func on_death():
 	print("you are dead")
+	event_handler.emit_signal("player_died")
 	#player death animation
 	#restart the level
 	#send signal to the level root

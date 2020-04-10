@@ -1,11 +1,11 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://sprites/AH_SpriteSheet_People1.png" type="Texture" id=1]
 [ext_resource path="res://scripts/player_controller.gd" type="Script" id=2]
 [ext_resource path="res://scripts/state machine/state_machine.gd" type="Script" id=3]
 [ext_resource path="res://scripts/state machine/player_states/player_idle.gd" type="Script" id=4]
 [ext_resource path="res://scripts/state machine/player_states/player_walk.gd" type="Script" id=5]
-[ext_resource path="res://sprites/AH_Sprite_People_1_normal_1.png" type="Texture" id=6]
+[ext_resource path="res://sprites/AH_SpriteSheet_People1_n_soft_1.png" type="Texture" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 6.0
@@ -78,6 +78,10 @@ tracks/0/keys = {
 [sub_resource type="CircleShape2D" id=6]
 radius = 30.0
 
+[sub_resource type="OccluderPolygon2D" id=7]
+cull_mode = 1
+polygon = PoolVector2Array( -2.17396, -6.14916, -5.4449, -5.96488, -6.9652, -2.6018, -6.91913, 1.31412, -5.81346, 5.04576, -2.95714, 6.24357, 2.80156, 6.38177, 4.22972, 4.49292, 6.0725, 1.54447, 7.1321, -2.1411, 6.0725, -4.35244, 3.90723, -5.96488 )
+
 [node name="player" type="KinematicBody2D" groups=[
 "player",
 ]]
@@ -122,6 +126,9 @@ script = ExtResource( 4 )
 
 [node name="move" type="Node" parent="state_machine"]
 script = ExtResource( 5 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource( 7 )
 [connection signal="body_entered" from="pick_pocket_range" to="." method="_on_pick_pocket_range_body_entered"]
 [connection signal="body_exited" from="pick_pocket_range" to="." method="_on_pick_pocket_range_body_exited"]
 [connection signal="timeout" from="scent_spawner" to="." method="_on_scent_spawner_timeout"]

@@ -1,11 +1,12 @@
 extends "res://scripts/state machine/state.gd"
 
 func enter():
-	print("%s entered" %name)
+#	print("%s entered" %name)
+	owner.get_node("state_machine").change_state("move")
 	pass
 	
 func exit():
-	print("%s entered" %name)
+#	print("%s entered" %name)
 	pass
 	
 func update(_delta : float):
@@ -21,13 +22,12 @@ func chase_player():
 #		owner.get_node("behaviour_tree").change_state("seek")
 		return
 	
-	owner.get_node("state_machine").change_state("move")
 	owner.direction = owner.player.position - owner.position
 	owner.direction = owner.direction.normalized()
 
 func chatch_player():
 	if owner.player == null:
-#		owner.get_node("behaviour_tree").change_state("seek")
+		owner.get_node("behaviour_tree").change_state("seek")
 		return
 		
 	if owner.position.distance_to(owner.player.position) <= 10.0:

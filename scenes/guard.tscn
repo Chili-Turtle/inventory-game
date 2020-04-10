@@ -134,7 +134,7 @@ script = ExtResource( 5 )
 
 [node name="behaviour_tree" type="Node" parent="."]
 script = ExtResource( 3 )
-start_state = NodePath("chase")
+start_state = NodePath("patrol")
 
 [node name="patrol" type="Node" parent="behaviour_tree"]
 script = ExtResource( 8 )

@@ -18,6 +18,8 @@ var player = null
 
 var index = 0
 
+var alerted : bool = false
+
 export(NodePath) var patrole_path = null
 
 var patrole_curve : Curve2D
@@ -31,26 +33,29 @@ func _ready():
 	
 func _process(delta):
 	update()
+	player_in_vision_cone()
 	pass
 	
 func _physics_process(delta):
-	#if patroling and player is in vision cone stealing, go to chase state
-	#if player is out of chase radius, go back to scent path
-	
 	#stand_still state
 	#if no scent is there stop, and turn/player left, right.. animation, and ajust the angle
 	pass
 	
+#	player.position.angle_to_point(position)
+	
 func player_in_vision_cone():
 	if player != null:
-		if position.angle_to_point(player.position) <= deg2rad(45) && position.angle_to_point(player.position) >= -deg2rad(45):
-			var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
-			print(ray.collider.name)
+		var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
+		if !ray.empty():
 			if ray.collider.is_in_group("player"):
-				print("player in sight %s" %rad2deg(position.angle_to_point(player.position)))
-				if player.is_stealing == true:
-					print("guard stop that crimenal scum")
-					#chase the player
+				if alerted == true:
+					$behaviour_tree.change_state("chase")
+#					print("player in sight %s" %rad2deg(position.angle_to_point(player.position)))
+				elif player.position.angle_to_point(position) <= deg2rad(sight_angle + 45) && player.position.angle_to_point(position) >= deg2rad(sight_angle - 45):
+					if player.is_stealing == true:
+#						print("guard stop that crimenal scum")
+						$behaviour_tree.change_state("chase")
+						alerted = true
 	pass
 
 func get_ray_cast(target : Vector2):
@@ -92,6 +97,7 @@ func _on_detect_radius_area_exited(area):
 
 func _on_player_detection_body_entered(body):
 	if body.is_in_group("player"):
+		print(player)
 		player = body
 	pass
 
