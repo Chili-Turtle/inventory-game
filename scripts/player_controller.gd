@@ -11,10 +11,14 @@ var steal_target = null
 
 var knock_back_dir : Vector2
 
-var pocketing_range = 20.0
+var pocketing_range = 30.0
 
 var can_steal = false
 var is_stealing = false
+
+var sprint_value : float
+var sprint_value_max : float = 100.0
+var can_sprint : bool = true
 
 var scent_collider : Array = []
 
@@ -22,12 +26,27 @@ var health : int
 var max_health : int = 3
 
 func _ready():
+	sprint_value = sprint_value_max
 	init_inventory()
 	health = max_health
+	$pick_pocket_range/CollisionShape2D.shape.radius = pocketing_range
+	event_handler.connect("game_loaded", self, "on_game_loaded")
+	pass
+	
+func on_game_loaded():
+	event_handler.emit_signal("update_player_hp", health)
+	event_handler.emit_signal("update_sprint", sprint_value)
 	pass
 
 func _physics_process(delta):
 	update()
+	
+	sprint_value += delta * 100.0
+	sprint_value = clamp(sprint_value, 0.0, sprint_value_max)
+	event_handler.emit_signal("update_sprint", sprint_value)
+	
+	if sprint_value >= sprint_value_max:
+		can_sprint = true
 	
 	velocity = direction
 	velocity += knock_back_dir
@@ -88,11 +107,12 @@ func remove_item(item_name):
 
 func take_damage(enemy, damage : int, force : float):
 	health -= damage
-	#play damage aniamtion
-	#call to ui health -1 one
+	event_handler.emit_signal("update_player_hp", health)
+	$status_animation.play("damaged")
+	event_handler.emit_signal("start_camera_shake", 0.5)
 	knock_back(enemy, force)
 	
-	if health <= 0:
+	if health == 0:
 		on_death()
 	pass
 	

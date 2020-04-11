@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scripts/root_scene.gd" type="Script" id=1]
 [ext_resource path="res://scenes/GUI/inventory_space.tscn" type="PackedScene" id=2]
@@ -11,6 +11,8 @@
 [ext_resource path="res://scenes/debugging/debugging_panel.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/GUI/dialogue.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scripts/camera_controller.gd" type="Script" id=11]
+[ext_resource path="res://scripts/GUI/player_hp.gd" type="Script" id=12]
+[ext_resource path="res://scripts/GUI/Canvas_shake.gd" type="Script" id=13]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -20,6 +22,33 @@ _data = {
 [sub_resource type="Curve2D" id=2]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 301.746, 204.597, 0, 0, 0, 0, 288.393, 206.075, 0, 0, 0, 0, 274.738, 199.735, 0, 0, 0, 0, 277.664, 128.047, 0, 0, 0, 0, 307.162, 115.612, 0, 0, 0, 0, 300.972, 201.501 )
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("RichTextLabel:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 
 [node name="root scene" type="Node2D"]
@@ -48,6 +77,7 @@ position = Vector2( 374.398, 205.089 )
 patrole_path = NodePath("../guard_1_path")
 
 [node name="light_comb" parent="." instance=ExtResource( 6 )]
+material = null
 position = Vector2( 112.252, 51.7488 )
 
 [node name="light_comb4" parent="." instance=ExtResource( 6 )]
@@ -112,11 +142,14 @@ position = Vector2( 1239.59, 192.114 )
 normal_map = null
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource( 13 )
 
 [node name="debugging_panel" parent="CanvasLayer" instance=ExtResource( 9 )]
+visible = false
 
 [node name="inventory_space" parent="CanvasLayer" instance=ExtResource( 2 )]
-margin_bottom = 594.0
+margin_top = -0.857361
+margin_bottom = 593.143
 
 [node name="Line2D" type="Line2D" parent="CanvasLayer/inventory_space"]
 width = 60.0
@@ -174,12 +207,100 @@ margin_top = 47.9562
 margin_right = 358.209
 margin_bottom = 140.957
 
+[node name="player_hp" type="ProgressBar" parent="CanvasLayer"]
+margin_left = 28.3535
+margin_top = 23.7399
+margin_right = 116.354
+margin_bottom = 43.7399
+max_value = 3.0
+step = 0.1
+value = 3.0
+rounded = true
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/player_hp"]
+margin_left = 93.0
+margin_top = 4.0
+margin_right = 133.0
+margin_bottom = 35.0
+text = "HP
+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="player_sprint_bar" type="ProgressBar" parent="CanvasLayer"]
+self_modulate = Color( 0.0784314, 1, 0, 1 )
+margin_left = 28.0
+margin_top = 49.0
+margin_right = 90.0
+margin_bottom = 63.0
+max_value = 100.0
+step = 0.1
+value = 100.0
+rounded = true
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/player_sprint_bar"]
+margin_left = 64.9573
+margin_top = 0.63736
+margin_right = 104.957
+margin_bottom = 14.6374
+text = "stamina
+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="game_over" type="ColorRect" parent="CanvasLayer"]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/game_over"]
+self_modulate = Color( 1, 1, 1, 0 )
+margin_left = 440.263
+margin_top = 282.473
+margin_right = 662.263
+margin_bottom = 335.473
+bbcode_enabled = true
+bbcode_text = "[wave]You got captured[/wave]"
+text = "You got captured"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="button_prompt" type="RichTextLabel" parent="CanvasLayer/game_over"]
+margin_left = 470.169
+margin_top = 351.163
+margin_right = 692.169
+margin_bottom = 404.163
+text = "R Restart
+T Main Menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/game_over"]
+anims/fade_in = SubResource( 3 )
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 511.06, 297.069 )
 rotating = true
 current = true
 script = ExtResource( 11 )
 [connection signal="ready" from="." to="." method="_on_root_scene_ready"]
+[connection signal="animation_finished" from="CanvasLayer/game_over/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 
 [editable path="bar 1"]
 

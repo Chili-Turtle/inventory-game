@@ -30,4 +30,6 @@ func update(_delta : float):
 	pass
 
 func handle_input(_event):
+	if _event.is_action_pressed("ui_accept") && owner.can_sprint == true:
+		owner.get_node("state_machine").change_state("dash")
 	pass

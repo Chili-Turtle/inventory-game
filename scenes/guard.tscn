@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://sprites/AH_SpriteSheet_People1.png" type="Texture" id=1]
 [ext_resource path="res://scripts/guard.gd" type="Script" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://scripts/state machine/guard_behaviour/guard_seek.gd" type="Script" id=7]
 [ext_resource path="res://scripts/state machine/guard_behaviour/guard_patrol.gd" type="Script" id=8]
 [ext_resource path="res://sprites/AH_Sprite_People_1_normal_1.png" type="Texture" id=9]
+[ext_resource path="res://occluder_person.tres" type="OccluderPolygon2D" id=10]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 8.0
@@ -111,16 +112,16 @@ collision_mask = 32
 [node name="CollisionShape2D" type="CollisionShape2D" parent="detect_radius"]
 shape = SubResource( 6 )
 
-[node name="Inventory" type="Node" parent="."]
-
-[node name="sword dummy" type="Node" parent="Inventory"]
-
 [node name="player_detection" type="Area2D" parent="."]
 collision_layer = 16
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="player_detection"]
 shape = SubResource( 7 )
+
+[node name="Inventory" type="Node" parent="."]
+
+[node name="sword dummy" type="Node" parent="Inventory"]
 
 [node name="state_machine" type="Node" parent="."]
 script = ExtResource( 3 )
@@ -144,7 +145,13 @@ script = ExtResource( 6 )
 
 [node name="seek" type="Node" parent="behaviour_tree"]
 script = ExtResource( 7 )
+
+[node name="Timer" type="Timer" parent="behaviour_tree/seek"]
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = ExtResource( 10 )
 [connection signal="area_entered" from="detect_radius" to="." method="_on_detect_radius_area_entered"]
 [connection signal="area_exited" from="detect_radius" to="." method="_on_detect_radius_area_exited"]
 [connection signal="body_entered" from="player_detection" to="." method="_on_player_detection_body_entered"]
 [connection signal="body_exited" from="player_detection" to="." method="_on_player_detection_body_exited"]
+[connection signal="timeout" from="behaviour_tree/seek/Timer" to="behaviour_tree/seek" method="_on_Timer_timeout"]

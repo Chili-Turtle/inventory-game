@@ -275,6 +275,7 @@ func path_generation_cur_dir_angle(resolution = 4):
 func on_bumped_in(area):
 	if npc != null && is_pocketing == true:
 		if area.is_in_group("item"):
+			event_handler.emit_signal("start_canvas_shake", 0.5)
 			npc.notice_value += 10.0
 #			print("punishing")
 	pass

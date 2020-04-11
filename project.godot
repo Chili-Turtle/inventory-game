@@ -34,6 +34,7 @@ config/icon="res://icon.png"
 
 Database="*res://scripts/globals/database.gd"
 event_handler="*res://scripts/globals/event_handler.gd"
+MM="*res://scenes/music_manager.tscn"
 
 [display]
 
@@ -91,6 +92,12 @@ interact={
 2d_physics/layer_4="enemy_body"
 2d_physics/layer_5="enemy_area"
 2d_physics/layer_6="scent_path"
+
+[locale]
+
+translation_remaps={
+
+}
 
 [rendering]
 

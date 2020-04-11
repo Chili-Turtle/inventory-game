@@ -21,9 +21,7 @@ var sight_angle = 0.0
 
 var angle = 0
 
-var pocket_color : Color = Color(0.2, 0.6, 0.0, 0.3)
-var transparent_color : Color = Color(0.0, 0.0, 0.0, 0.0)
-var current_color : Color
+
 
 var player = null
 
@@ -36,7 +34,7 @@ export(NodePath) var patrole_path = null
 var patrole_curve : Curve2D
 
 func _ready():
-	current_color = transparent_color
+	
 #	print("this is the path: %s " %to_global($Path2D.get_curve().get_point_position(0)))
 #	print("this is the path: %s " %get_node(patrole_path).get_curve().get_point_position(0))
 	if patrole_path != null:
@@ -51,6 +49,8 @@ func _ready():
 	
 	add_item("sword")
 	add_item("axe")
+	
+	$CanvasLayer/button_prompt.visible = false
 #	print(inventory)
 
 	pass
@@ -86,15 +86,11 @@ func remove_item(item_name):
 	pass
 
 func _process(delta):
-	
-	if player != null:
-		current_color = current_color.linear_interpolate(pocket_color, delta * 10.0)
-	else:
-		current_color = current_color.linear_interpolate(transparent_color, delta * 10.0)
-	
 	angle -= delta * 500.0
 	update()
 	is_player_in_vision()
+	
+	$CanvasLayer/button_prompt.rect_position = to_global($Position2D.position)
 	pass
 	
 func add_notice(value : float):
@@ -110,12 +106,31 @@ func is_player_in_vision(): #this should be a bool
 	#if down and between -45, -135
 	#if up and between 45, 135
 	
+	$CanvasLayer/button_prompt.visible = true
+	
 	 #0.0 when right 180 when left, when npc is left == 0.0, when npc is right 180
+	
+	print("sight angle %s" %[sight_angle + 45])
+	print("player pos %s" %[rad2deg(player.position.angle_to_point(position))])
+	
+	# 160 <= 225 && 160 >= 135
+	#-160 >= 255 && -160 <= 135 #abs messes with the other direction
+	
 	if player.position.angle_to_point(position) <= deg2rad(sight_angle + 45) && player.position.angle_to_point(position) >= deg2rad(sight_angle - 45):
 		var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
 #		print("in vision cone")
 		if !ray.empty():
 			if ray.collider.is_in_group("player"):
+				$CanvasLayer/button_prompt.visible = false
+				if player.is_stealing == true:
+					player.cancel_stealing()
+					print("Hey what are you doing")
+	elif player.position.angle_to_point(position) <= deg2rad(-sight_angle + 45) && player.position.angle_to_point(position) >= deg2rad(-sight_angle - 45):
+		var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
+#		print("in vision cone")
+		if !ray.empty():
+			if ray.collider.is_in_group("player"):
+				$CanvasLayer/button_prompt.visible = false
 				if player.is_stealing == true:
 					player.cancel_stealing()
 					print("Hey what are you doing")
@@ -143,29 +158,16 @@ func _draw():
 	
 	###---draw vision cone---###
 	draw_arc(to_local(position), 40.0, deg2rad(sight_angle + 45), deg2rad(sight_angle - 45), 10,Color.orange, 3.0, true) #0.0 when right 180 when left
-	
-	#make a extra node which draws the circl
-	draw_circle(to_local(position), 20.0, current_color)
-	
-	
-	###---this is for drawing the sight radius/form---###
-#	var pool : PoolVector2Array
-#	pool.append(Vector2(0,0))
-#	pool.append(Vector2(40,40))
-#	pool.append(Vector2(40,80))
-#	var color_pool : PoolColorArray
-#	color_pool.append(Color.red)
-#	color_pool.append(Color.green)
-#	color_pool.append(Color.blue)
-#	draw_colored_polygon(pool, Color.red)
 	pass
 
 func _on_sight_body_entered(body):
 	if body.is_in_group("player"):
 		player = body
+		$CanvasLayer/button_prompt.visible = true
 		pass
 	pass
 
 func _on_sight_body_exited(body):
 	player = null
+	$CanvasLayer/button_prompt.visible = false
 	pass

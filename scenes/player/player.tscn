@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://sprites/AH_SpriteSheet_People1.png" type="Texture" id=1]
 [ext_resource path="res://scripts/player_controller.gd" type="Script" id=2]
@@ -6,6 +6,10 @@
 [ext_resource path="res://scripts/state machine/player_states/player_idle.gd" type="Script" id=4]
 [ext_resource path="res://scripts/state machine/player_states/player_walk.gd" type="Script" id=5]
 [ext_resource path="res://sprites/AH_SpriteSheet_People1_n_soft_1.png" type="Texture" id=6]
+[ext_resource path="res://occluder_person.tres" type="OccluderPolygon2D" id=7]
+[ext_resource path="res://scripts/state machine/player_states/player_dash.gd" type="Script" id=8]
+[ext_resource path="res://sprites/particels/objects.png" type="Texture" id=9]
+[ext_resource path="res://sprites/particels/dust_2.png" type="Texture" id=10]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 6.0
@@ -78,9 +82,59 @@ tracks/0/keys = {
 [sub_resource type="CircleShape2D" id=6]
 radius = 30.0
 
-[sub_resource type="OccluderPolygon2D" id=7]
-cull_mode = 1
-polygon = PoolVector2Array( -2.17396, -6.14916, -5.4449, -5.96488, -6.9652, -2.6018, -6.91913, 1.31412, -5.81346, 5.04576, -2.95714, 6.24357, 2.80156, 6.38177, 4.22972, 4.49292, 6.0725, 1.54447, 7.1321, -2.1411, 6.0725, -4.35244, 3.90723, -5.96488 )
+[sub_resource type="Animation" id=8]
+resource_name = "player_dash"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath("../../particle:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+}
+
+[sub_resource type="Gradient" id=9]
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=10]
+gradient = SubResource( 9 )
+
+[sub_resource type="ParticlesMaterial" id=11]
+flag_disable_z = true
+spread = 20.0
+flatness = 0.5
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 100.0
+initial_velocity_random = 0.2
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping = 150.0
+damping_random = 0.4
+angle = 360.0
+angle_random = 0.5
+scale_random = 1.0
+color_ramp = SubResource( 10 )
+
+[sub_resource type="Animation" id=7]
+resource_name = "damaged"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("playesr_sprite:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 0.984314, 0.984314, 1 ), Color( 1, 0, 0, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0, 0, 1 ), Color( 1, 1, 1, 1 ) ]
+}
 
 [node name="player" type="KinematicBody2D" groups=[
 "player",
@@ -89,9 +143,11 @@ collision_layer = 2
 script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource( 1 )
 
 [node name="playesr_sprite" type="Sprite" parent="."]
+self_modulate = Color( 1, 0.984314, 0.984314, 1 )
 texture = ExtResource( 1 )
 normal_map = ExtResource( 6 )
 vframes = 4
@@ -127,8 +183,41 @@ script = ExtResource( 4 )
 [node name="move" type="Node" parent="state_machine"]
 script = ExtResource( 5 )
 
+[node name="dash" type="Node" parent="state_machine"]
+script = ExtResource( 8 )
+
+[node name="dash_timer" type="Timer" parent="state_machine/dash"]
+wait_time = 0.1
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="state_machine/dash"]
+anims/player_dash = SubResource( 8 )
+
+[node name="dust_particles" type="Particles2D" parent="state_machine/dash"]
+emitting = false
+amount = 10
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+local_coords = false
+process_material = SubResource( 11 )
+texture = ExtResource( 10 )
+
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
-occluder = SubResource( 7 )
+occluder = ExtResource( 7 )
+
+[node name="status_animation" type="AnimationPlayer" parent="."]
+anims/damaged = SubResource( 7 )
+
+[node name="particle" type="Sprite" parent="."]
+show_behind_parent = true
+position = Vector2( 0, -7.37854 )
+texture = ExtResource( 9 )
+hframes = 8
+frame = 7
+region_enabled = true
+region_rect = Rect2( 64, 64, 256, 32 )
 [connection signal="body_entered" from="pick_pocket_range" to="." method="_on_pick_pocket_range_body_entered"]
 [connection signal="body_exited" from="pick_pocket_range" to="." method="_on_pick_pocket_range_body_exited"]
 [connection signal="timeout" from="scent_spawner" to="." method="_on_scent_spawner_timeout"]
+[connection signal="timeout" from="state_machine/dash/dash_timer" to="state_machine/dash" method="_on_dash_timer_timeout"]

@@ -17,6 +17,7 @@ var zoomOffset : Vector2
 var rollDirection = 0
 
 func _ready():
+	event_handler.connect("start_camera_shake", self, "add_trauma")
 	randomize()
 	noise.seed = randi()
 	noise.period = 4

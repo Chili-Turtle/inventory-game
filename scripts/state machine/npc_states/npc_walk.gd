@@ -48,7 +48,7 @@ func set_animation():
 	if rad2deg(owner.direction.angle_to(Vector2.RIGHT)) <= 180.0 && rad2deg(owner.direction.angle_to(Vector2.RIGHT)) >= 135.0 or \
 		rad2deg(owner.direction.angle_to(Vector2.RIGHT)) <= -135.0 && rad2deg(owner.direction.angle_to(Vector2.RIGHT)) >= -180.0:
 		owner.get_node("AnimationPlayer").play("npc_left")
-		owner.sight_angle = 180
+		owner.sight_angle = 180 #this sould be also -180
 	if rad2deg(owner.direction.angle_to(Vector2.RIGHT)) <= 135.0 && rad2deg(owner.direction.angle_to(Vector2.RIGHT)) >= 45.0:
 		owner.get_node("AnimationPlayer").play("npc_up")
 		owner.sight_angle = -90

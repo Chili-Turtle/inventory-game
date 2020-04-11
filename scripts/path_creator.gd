@@ -19,7 +19,7 @@ func create_collision():
 	start_trigger.add_child(start_collision)
 	start_collision.shape = RectangleShape2D.new() 
 	start_collision.shape.extents.x = width / 2.0
-	start_collision.shape.extents.y = 2.0
+	start_collision.shape.extents.y = 4.0
 	
 	###---create middle_trigger---###
 	var middle_trigger = Area2D.new()
@@ -45,7 +45,7 @@ func create_collision():
 	middle_collision.shape = RectangleShape2D.new() 
 	middle_trigger.rotation = rot_dir_3.angle() #rotation to x vector
 	middle_collision.shape.extents.x = width / 1.5
-	middle_collision.shape.extents.y = 2.0
+	middle_collision.shape.extents.y = 4.0
 	
 	###---create end_trigger---###
 	var end_trigger = Area2D.new()
@@ -56,7 +56,7 @@ func create_collision():
 	var end_collision = CollisionShape2D.new()
 	end_trigger.add_child(end_collision)
 	end_collision.shape = RectangleShape2D.new() 
-	end_collision.shape.extents.x = 2.0
+	end_collision.shape.extents.x = 4.0
 	end_collision.shape.extents.y = width / 2.0
 	
 	###---calc the boundary points---###

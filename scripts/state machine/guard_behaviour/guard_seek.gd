@@ -25,8 +25,12 @@ func get_scent_direction():
 
 func detect_scent_trail():
 	if owner.scent_path.size() <= 0:
-		owner.get_node("behaviour_tree").change_state("patrol")
-		return
+		print($Timer.time_left)
+		if $Timer.is_stopped():
+			$Timer.start()
+#		return
+	else:
+		$Timer.stop()
 	
 	for scent in owner.scent_path:
 		if owner.last_scent == null:
@@ -51,3 +55,8 @@ func detect_scent_trail():
 		if owner.last_scent.position.distance_to(owner.position) <= 2.0:
 			owner.scent_path.erase(scent)
 			owner.last_scent = null
+
+
+func _on_Timer_timeout():
+	owner.get_node("behaviour_tree").change_state("patrol")
+	pass
