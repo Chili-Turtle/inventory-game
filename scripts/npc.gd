@@ -21,8 +21,6 @@ var sight_angle = 0.0
 
 var angle = 0
 
-
-
 var player = null
 
 var hit_point = Vector2()
@@ -91,6 +89,7 @@ func _process(delta):
 	is_player_in_vision()
 	
 	$CanvasLayer/button_prompt.rect_position = to_global($Position2D.position)
+	$CanvasLayer/exclamation_mark.rect_position = to_global($Position2D.position)
 	pass
 	
 func add_notice(value : float):
@@ -110,30 +109,91 @@ func is_player_in_vision(): #this should be a bool
 	
 	 #0.0 when right 180 when left, when npc is left == 0.0, when npc is right 180
 	
-	print("sight angle %s" %[sight_angle + 45])
-	print("player pos %s" %[rad2deg(player.position.angle_to_point(position))])
+#	print("sight angle %s" %[sight_angle + 45])
+#	print("player pos %s" %[rad2deg(player.position.angle_to_point(position))])
 	
 	# 160 <= 225 && 160 >= 135
 	#-160 >= 255 && -160 <= 135 #abs messes with the other direction
+#	print(rad2deg(acos((player.position - position).normalized().dot(Vector2(1, 0)))))
+
+
+#put the negative and the posetives together, if sight_angle >= 0 "do this"/ elif sight angle <= 0 "do that"
+
+	#cone right
+	if sight_angle == 0.0:
+		if player.position.angle_to_point(position) <= deg2rad(45) && player.position.angle_to_point(position) >= deg2rad(-45):
+			var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
+			if !ray.empty():
+				if ray.collider.is_in_group("player"):
+					$CanvasLayer/button_prompt.visible = false
+					if player.is_stealing == true:
+						player.cancel_stealing()
+						notice_value += 50
+						event_handler.emit_signal("alert_guards")
+						$exclamation_anim.play("exclamation_anim")
 	
-	if player.position.angle_to_point(position) <= deg2rad(sight_angle + 45) && player.position.angle_to_point(position) >= deg2rad(sight_angle - 45):
-		var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
-#		print("in vision cone")
-		if !ray.empty():
-			if ray.collider.is_in_group("player"):
-				$CanvasLayer/button_prompt.visible = false
-				if player.is_stealing == true:
-					player.cancel_stealing()
-					print("Hey what are you doing")
-	elif player.position.angle_to_point(position) <= deg2rad(-sight_angle + 45) && player.position.angle_to_point(position) >= deg2rad(-sight_angle - 45):
-		var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
-#		print("in vision cone")
-		if !ray.empty():
-			if ray.collider.is_in_group("player"):
-				$CanvasLayer/button_prompt.visible = false
-				if player.is_stealing == true:
-					player.cancel_stealing()
-					print("Hey what are you doing")
+	#cone left
+	if sight_angle == 180.0:
+		if player.position.angle_to_point(position) <= deg2rad(180) && player.position.angle_to_point(position) >= deg2rad(135) || \
+		   player.position.angle_to_point(position) <= deg2rad(-135) && player.position.angle_to_point(position) >= deg2rad(-180):
+			var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
+			if !ray.empty():
+				if ray.collider.is_in_group("player"):
+					$CanvasLayer/button_prompt.visible = false
+					if player.is_stealing == true:
+						player.cancel_stealing()
+						notice_value += 50
+						event_handler.emit_signal("alert_guards")
+						$exclamation_anim.play("exclamation_anim")
+	#cone up
+	if sight_angle == -90.0:
+		if player.position.angle_to_point(position) <= deg2rad(-45) && player.position.angle_to_point(position) >= deg2rad(-135):
+			var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
+			if !ray.empty():
+				if ray.collider.is_in_group("player"):
+					$CanvasLayer/button_prompt.visible = false
+					if player.is_stealing == true:
+						player.cancel_stealing()
+						notice_value += 50
+						event_handler.emit_signal("alert_guards")
+						$exclamation_anim.play("exclamation_anim")
+	#cone down
+	if sight_angle == 90.0:
+		if player.position.angle_to_point(position) <= deg2rad(135) && player.position.angle_to_point(position) >= deg2rad(45):
+			var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
+			if !ray.empty():
+				if ray.collider.is_in_group("player"):
+					$CanvasLayer/button_prompt.visible = false
+					if player.is_stealing == true:
+						player.cancel_stealing()
+						notice_value += 50
+						event_handler.emit_signal("alert_guards")
+						$exclamation_anim.play("exclamation_anim")
+	
+	
+#	if player.position.angle_to_point(position) <= deg2rad(sight_angle + 45) && player.position.angle_to_point(position) >= deg2rad(sight_angle - 45):
+#		var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
+##		print("in vision cone")
+#		if !ray.empty():
+#			if ray.collider.is_in_group("player"):
+#				$CanvasLayer/button_prompt.visible = false
+#				if player.is_stealing == true:
+#					player.cancel_stealing()
+#					print("Hey what are you doing")
+
+
+
+
+
+#	elif player.position.angle_to_point(position) <= deg2rad(-sight_angle + 45) && player.position.angle_to_point(position) >= deg2rad(-sight_angle - 45):
+#		var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
+##		print("in vision cone")
+#		if !ray.empty():
+#			if ray.collider.is_in_group("player"):
+#				$CanvasLayer/button_prompt.visible = false
+#				if player.is_stealing == true:
+#					player.cancel_stealing()
+#					print("Hey what are you doing")
 				#add suspicion level if you have more then 2-3 all guard are immediately alerted
 	pass
 

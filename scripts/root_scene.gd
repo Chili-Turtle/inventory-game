@@ -2,7 +2,9 @@ extends Node2D
 
 var enable_presses : bool = false
 
-var clip = load("res://audio/music/Brimstone.wav")
+var clip = load("res://audio/music/bar_music_1.wav")
+
+var game_over = load("res://audio/music/game_over_1.wav")
 
 func _on_root_scene_ready():
 	event_handler.emit_signal("game_loaded")
@@ -15,14 +17,11 @@ func _on_root_scene_ready():
 	
 	MM.play_music(clip)
 	
-	yield(get_tree().create_timer(1.0), "timeout")
-	
-	MM.play_music(clip)
 	pass
 	
 func _input(event):
 	if event.is_action("interact"):
-		MM.play_music(clip)
+#		MM.play_music(clip)
 #		$Camera2D.add_trauma(1.0)
 		pass
 		
@@ -31,7 +30,8 @@ func _input(event):
 			if event.scancode == KEY_R:
 				get_tree().reload_current_scene()
 			if event.scancode == KEY_T:
-				print("go to main menu")
+				#"go to main menu"
+				pass
 		pass
 
 func on_game_over():
@@ -39,6 +39,8 @@ func on_game_over():
 	$CanvasLayer/game_over.visible = true
 	Engine.time_scale = 0.5
 	$CanvasLayer/game_over/AnimationPlayer.play("fade_in")
+	
+	MM.play_music(game_over)
 	pass
 
 

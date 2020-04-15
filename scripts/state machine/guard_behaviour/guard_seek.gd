@@ -1,12 +1,12 @@
 extends "res://scripts/state machine/state.gd"
 
+
 func enter():
-#	print("%s entered" %name)
 	owner.get_node("state_machine").change_state("move")
 	pass
 	
 func exit():
-#	print("%s entered" %name)
+	$Timer.stop()
 	pass
 	
 func update(_delta : float):
@@ -25,7 +25,6 @@ func get_scent_direction():
 
 func detect_scent_trail():
 	if owner.scent_path.size() <= 0:
-		print($Timer.time_left)
 		if $Timer.is_stopped():
 			$Timer.start()
 #		return

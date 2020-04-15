@@ -8,6 +8,7 @@ var is_on_screen : bool = false
 
 func _ready():
 	event_handler.connect("display_dialogue", self, "start_dialogue")
+	visible = true
 	pass
 	
 func start_dialogue(_dialogue : String):

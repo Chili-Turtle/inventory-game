@@ -3,11 +3,9 @@ extends "res://scripts/state machine/state.gd"
 var speed : float = 30.0
 
 func enter():
-#	print("%s entered" %name)
 	pass
 	
 func exit():
-#	print("%s entered" %name)
 	pass
 	
 func update(_delta : float):

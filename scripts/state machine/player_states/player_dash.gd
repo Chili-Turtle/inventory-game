@@ -3,7 +3,6 @@ extends "res://scripts/state machine/state.gd"
 var speed : float = 300.0
 
 func enter():
-#	print("%s entered" %name)
 	$dash_timer.start()
 	owner.sprint_value = 0.0
 	owner.can_sprint = false
@@ -14,7 +13,6 @@ func enter():
 	pass
 	
 func exit():
-#	print("%s entered" %name)
 	pass
 	
 func update(_delta : float):

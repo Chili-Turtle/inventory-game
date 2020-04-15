@@ -1,12 +1,12 @@
 extends "res://scripts/state machine/state.gd"
 
 func enter():
-#	print("%s entered" %name)
 	owner.get_node("state_machine").change_state("move")
+	
+	owner.get_node("AudioStreamPlayer").play()
 	pass
 	
 func exit():
-#	print("%s entered" %name)
 	pass
 	
 func update(_delta : float):
@@ -31,8 +31,5 @@ func chatch_player():
 		return
 		
 	if owner.position.distance_to(owner.player.position) <= 10.0:
-		print("player captured")
 		owner.player.take_damage(owner, 1, 500.0)
-		#add a knockback/forward to the player
-		#damage the player
 	pass

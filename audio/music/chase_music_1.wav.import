@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/chase_music_1.wav-4afd6eb44abf1546b0cf8c1da41034eb.sample"
+
+[deps]
+
+source_file="res://audio/music/chase_music_1.wav"
+dest_files=[ "res://.import/chase_music_1.wav-4afd6eb44abf1546b0cf8c1da41034eb.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

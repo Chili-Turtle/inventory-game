@@ -3,16 +3,16 @@ extends "res://scripts/state machine/state.gd"
 var speed = 20.0
 
 func enter():
-	print("%s entered" %name)
 	pass
 	
 func exit():
-	print("%s entered" %name)
 	pass
 	
 func update(_delta : float):
 	patrol(_delta)
 	set_animation()
+	
+	print(owner.name)
 	
 	owner.velocity += owner.steering
 	owner.velocity = owner.velocity.normalized() * speed
@@ -23,6 +23,7 @@ func handle_input(_event):
 	pass
 	
 func patrol(_delta):
+	print(owner.patrole_path)
 	if owner.patrole_path == null:
 		return
 	

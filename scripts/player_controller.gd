@@ -25,6 +25,12 @@ var scent_collider : Array = []
 var health : int
 var max_health : int = 3
 
+var is_dead : bool = false
+
+var damaged_sound = load("res://audio/SFX/Damage.wav")
+var open_bag_sound = load("res://audio/SFX/search 8 bit.wav")
+var close_bag_sound = load("res://audio/SFX/search 8 bit canceld.wav")
+
 func _ready():
 	sprint_value = sprint_value_max
 	init_inventory()
@@ -70,13 +76,22 @@ func _unhandled_input(event):
 	if event.is_action_pressed("interact") and can_steal == true:
 		if is_stealing == false:
 			event_handler.emit_signal("pick_pocket_started", steal_target, self)
+			$AudioStreamPlayer.stream = open_bag_sound
+			$AudioStreamPlayer.play()
+			MM.apply_filter()
 			is_stealing = true
 		elif is_stealing == true:
 			cancel_stealing()
 	pass
 	
 func cancel_stealing():
+	if is_stealing == false:
+		return
+		
+	MM.disable_filter()
 	event_handler.emit_signal("pick_pocket_ended", steal_target, self)
+	$AudioStreamPlayer.stream = close_bag_sound
+	$AudioStreamPlayer.play()
 	is_stealing = false
 	pass
 	
@@ -106,19 +121,24 @@ func remove_item(item_name):
 	pass
 
 func take_damage(enemy, damage : int, force : float):
+	if is_dead == true:
+		return
+	
 	health -= damage
 	event_handler.emit_signal("update_player_hp", health)
 	$status_animation.play("damaged")
 	event_handler.emit_signal("start_camera_shake", 0.5)
 	knock_back(enemy, force)
+	$AudioStreamPlayer.stream = damaged_sound
+	$AudioStreamPlayer.play()
 	
 	if health == 0:
 		on_death()
 	pass
 	
 func on_death():
-	print("you are dead")
 	event_handler.emit_signal("player_died")
+	is_dead = true
 	#player death animation
 	#restart the level
 	#send signal to the level root
@@ -132,7 +152,7 @@ func knock_back(enemy, force = 0.0):
 
 
 func scent_path():
-	if scent_collider.size() >= 6:
+	if scent_collider.size() >= 5:
 		if scent_collider[0] != null:
 			scent_collider[0].queue_free()
 			scent_collider.pop_front()

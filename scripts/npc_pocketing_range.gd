@@ -4,15 +4,22 @@ var pocket_color : Color = Color(0.2, 0.6, 0.0, 0.5)
 var transparent_color : Color = Color(0.0, 0.0, 0.0, 0.0)
 var current_color : Color
 
+var orange : Color = Color(0.6, 0.2, 0.0, 0.5)
+
+export(float) var radius : float = 20.0
+export(bool) var draw_circle : bool = true
+
+
 func _ready():
 	current_color = transparent_color
+	update()
 	pass
 
 func _draw():
-	if owner.player != null:
+	if owner.player != null && draw_circle == true:
 		draw_circle(position, owner.player.pocketing_range, current_color)
-		
-
+	
+	draw_circle_arc_poly(position, radius, owner.sight_angle +45, owner.sight_angle -45, orange)
 #	draw_colored_polygon(pool, Color.red)
 
 #	var resolution = 8
@@ -38,3 +45,15 @@ func _process(delta):
 		current_color = current_color.linear_interpolate(pocket_color, delta * 10.0)
 	else:
 		current_color = current_color.linear_interpolate(transparent_color, delta * 10.0)
+
+
+func draw_circle_arc_poly(center, radius, angle_from, angle_to, color):
+	var nb_points = 32
+	var points_arc = PoolVector2Array() # PackedVector2Array()
+	points_arc.push_back(center)
+	var colors = PoolColorArray([color]) # PackedColorArray([color])
+
+	for i in range(nb_points + 1):
+		var angle_point = deg2rad(angle_from + i * (angle_to - angle_from) / nb_points)
+		points_arc.push_back(center + Vector2(cos(angle_point), sin(angle_point)) * radius)
+	draw_polygon(points_arc, colors)

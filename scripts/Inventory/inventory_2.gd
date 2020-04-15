@@ -10,11 +10,9 @@ func _ready():
 	pass
 	
 func mouse_enter_slot(slot):
-	print("mouse entered")
 	pass
 	
 func mouse_exit_slot(slot):
-	print("mouse exit")
 	pass
 
 func _process(delta):
@@ -35,9 +33,7 @@ func gui_input(event, slot):
 	pass
 
 func _input(event):
-	#print("event")
 	if event is InputEventMouseMotion && holding_item != null:
-		#print("mouse pos")
 		holding_item.position = event.position
 	if event is InputEventMouseButton && holding_item != null:
 		if event.is_pressed():
@@ -50,7 +46,6 @@ func _input(event):
 
 
 func _on_pick_pocket_range_body_entered(body):
-	#print(body.name)
 	if body.is_in_group("player"):
 		self.show()
 	pass
@@ -63,13 +58,8 @@ func _on_pick_pocket_range_body_exited(body):
 
 
 func _on_Area2D_area_shape_exited(area_id, area, area_shape, self_shape):
-	
-	
 	if area.is_in_group("steal"):
-		print("some icon is out of bounds")
-	pass # Replace with function body.
-
+		pass 
 
 func _on_Area2D_area_entered(area):
-	print("some icon is out of bounds")
-	pass # Replace with function body.
+	pass 

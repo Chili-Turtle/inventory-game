@@ -11,6 +11,8 @@ signal pocketing_started()
 signal pocketing_canceled()
 signal pocketing_ended()
 
+signal alert_guards()
+
 signal start_canvas_shake(trauma)
 signal start_camera_shake(trauma)
 

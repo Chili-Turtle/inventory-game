@@ -17,9 +17,7 @@ extends Navigation2D
 #func _ready():
 ##	$draw_node.poolvector = get_simple_path(start.position, end.position)
 #
-#	print(get_simple_path(start.position, end.position))
-#	print(get_closest_point(dummy.position))
-#	print(dummy.position)
+
 #	pass
 #
 #func _physics_process(delta):

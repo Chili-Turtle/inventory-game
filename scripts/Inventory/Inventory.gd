@@ -22,9 +22,7 @@ var mouse_offset : Vector2
 
 var last_slot
 
-#var current_inventory
-
-#save the inventorty in an array
+var is_invincible = false
 
 var index = 0
 
@@ -36,6 +34,9 @@ var player
 
 var state = "none"
 
+var trans = Color(0.0,0.0,0.0,0.0)
+var col = Color(1.0,1.0,1.0,1.0)
+
 func _ready():
 	event_handler.connect("pick_pocket_started", self, "_on_pick_pocket_started")
 	event_handler.connect("pick_pocket_ended", self, "_on_pick_pocket_ended")
@@ -45,11 +46,15 @@ func _ready():
 	event_handler.connect("pocketing_ended", self, "on_pocketing_ended")
 	
 	$notice_bar.visible = false
+	get_parent().get_node("vignette").visible = false
 	pass
 	
 func _on_pick_pocket_started(_npc, _player):
 	npc = _npc
 	player = _player
+	
+	get_parent().get_node("vignette").visible = true
+	get_parent().get_node("vignette/AnimationPlayer").play("vignette_fade_in")
 	
 	for i in range(0, 2):
 		var gui_inv = inventory_GUI.instance()
@@ -83,11 +88,11 @@ func _on_pick_pocket_ended(_npc, _player):
 		go_to_last_slot()
 		$Line2D.clear_path()
 		is_locked = true
-		print("is_locked %s " %is_locked)
-	
+		
 	if inventory_gui_player == null:
 		return
 
+	get_parent().get_node("vignette/AnimationPlayer").play("vignette_fade_out")
 	inventory_gui_player.call_deferred("queue_free")
 	inventory_gui_npc.call_deferred("queue_free")
 	$notice_bar.visible = false
@@ -144,12 +149,10 @@ func _on_item_slot_pressed(slot):
 				
 			match slot.get_node("../../../..").name:
 				"npc_inventory":
-#					print("remove item from npc %s" %slot.get_node("../../../..").name)
 					npc.remove_item(slot.item.item_name)
 				"player_inventory":
 					if is_locked == true:
 						return
-#					print("remove item from player %s" %slot.get_node("../../../..").name)
 					player.remove_item(slot.item.item_name)
 			
 			last_slot = slot
@@ -174,7 +177,6 @@ func _on_item_slot_pressed(slot):
 	
 		"holding":
 			if slot.item != null:
-#				print("can't add item, already has item")
 				return
 			
 			slot.item = selected_item
@@ -183,7 +185,6 @@ func _on_item_slot_pressed(slot):
 			#remove_child
 			match slot.get_node("../../../..").name:
 				"npc_inventory":
-#					print("add item to npc %s" %slot.get_node("../../../..").name)
 					npc.add_item(slot.item.item_name)
 				"player_inventory":
 					
@@ -191,7 +192,6 @@ func _on_item_slot_pressed(slot):
 						return
 						
 					is_locked = true
-#					print("add item to player %s" %slot.get_node("../../../..").name)
 					player.add_item(slot.item.item_name)
 			
 			remove_child(selected_item)
@@ -214,10 +214,8 @@ func go_to_last_slot():
 	
 	match last_slot.get_node("../../../..").name:
 			"npc_inventory":
-#				print("add item to npc %s" %last_slot.get_node("../../../..").name)
 				npc.add_item(last_slot.item.item_name)
 			"player_inventory":
-#				print("add item to player %s" %last_slot.get_node("../../../..").name)
 				player.add_item(last_slot.item.item_name)
 	
 	
@@ -273,11 +271,13 @@ func path_generation_cur_dir_angle(resolution = 4):
 	pass
 	
 func on_bumped_in(area):
-	if npc != null && is_pocketing == true:
+	if npc != null && is_pocketing == true && is_invincible == false:
 		if area.is_in_group("item"):
 			event_handler.emit_signal("start_canvas_shake", 0.5)
 			npc.notice_value += 10.0
-#			print("punishing")
+			$AudioStreamPlayer.play()
+			is_invincible = true
+			$invincibility_timer.start()
 	pass
 	
 
@@ -370,3 +370,8 @@ func _process(delta):
 		pass
 	pass
 
+
+
+func _on_invincibility_timer_timeout():
+	is_invincible = false
+	pass

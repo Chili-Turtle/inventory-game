@@ -19,5 +19,4 @@ func _init(_item_name, _item_value, _item_width = 60.0):
 	item_width = _item_width
 	
 func bumped(body):
-#	print("something bumped in me %s" %body)
 	pass
