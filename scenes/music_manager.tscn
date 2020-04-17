@@ -13,5 +13,5 @@ bus = "music"
 [node name="player_2" type="AudioStreamPlayer" parent="music"]
 bus = "music"
 
-[node name="Tween" type="Tween" parent="."]
-[connection signal="tween_completed" from="Tween" to="." method="_on_Tween_tween_completed"]
+[node name="filter_tween" type="Tween" parent="."]
+[connection signal="tween_completed" from="filter_tween" to="." method="_on_Tween_tween_completed"]

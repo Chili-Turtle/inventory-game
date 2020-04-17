@@ -11,9 +11,11 @@ var velocity : Vector2
 
 var direction : Vector2
 
+export(Array, String) var item_to_add = []
+
 #var speed : float = 0.0 #20
 
-var notice_value = 0
+var suspicion_value = 0
 
 var index = 0
 
@@ -27,34 +29,27 @@ var hit_point = Vector2()
 
 var steering : Vector2 = Vector2()
 
+var can_steal = true
+
 export(NodePath) var patrole_path = null
 
 var patrole_curve : Curve2D
 
 func _ready():
 	
-#	print("this is the path: %s " %to_global($Path2D.get_curve().get_point_position(0)))
-#	print("this is the path: %s " %get_node(patrole_path).get_curve().get_point_position(0))
 	if patrole_path != null:
 		patrole_curve = get_node(patrole_path).get_curve()
 	
-#	print($Path2D.curve.get_point_position(0) - position)
-	
-#	print(global_position)
-	event_handler.connect("game_loaded", self, "on_game_loaded")
-	
 	init_inventory()
 	
-	add_item("sword")
-	add_item("axe")
+	for i in item_to_add.size():
+		add_item(item_to_add[i])
+		pass
 	
 	$CanvasLayer/button_prompt.visible = false
-#	print(inventory)
-
 	pass
 
 func on_pick_pocket_noticed():
-#	print("stop stealing from me")
 	pass
 
 func init_inventory():
@@ -62,25 +57,20 @@ func init_inventory():
 		inventory[i] = null
 	pass
 
-func on_game_loaded():
-	pass
-	
 func add_item(item_name):
+	print(item_name)
 	for key in inventory:
 		if inventory[key] == null:
 			inventory[key] = item_name
 			return
-		
 	print("inventory is full")
 	pass
 	
 func remove_item(item_name):
-	var arr : Array = []
-	
 	for key in inventory:
 		if inventory[key] == item_name:
-			inventory.erase(key)
-			current_inventory_space -= 1
+			inventory[key] = null
+			break
 	pass
 
 func _process(delta):
@@ -88,37 +78,24 @@ func _process(delta):
 	update()
 	is_player_in_vision()
 	
+	if suspicion_value >= 100.0:
+		can_steal = false
+		print("can_steal %s" %can_steal)
+	
 	$CanvasLayer/button_prompt.rect_position = to_global($Position2D.position)
 	$CanvasLayer/exclamation_mark.rect_position = to_global($Position2D.position)
 	pass
 	
-func add_notice(value : float):
-	notice_value += value
+func add_suspicion(value : float):
+	suspicion_value += value
 	pass
 	
 func is_player_in_vision(): #this should be a bool
 	if player == null:
 		return
 	
-	#if left and between 45, -45
-	#if right and between 135 and -135
-	#if down and between -45, -135
-	#if up and between 45, 135
-	
 	$CanvasLayer/button_prompt.visible = true
 	
-	 #0.0 when right 180 when left, when npc is left == 0.0, when npc is right 180
-	
-#	print("sight angle %s" %[sight_angle + 45])
-#	print("player pos %s" %[rad2deg(player.position.angle_to_point(position))])
-	
-	# 160 <= 225 && 160 >= 135
-	#-160 >= 255 && -160 <= 135 #abs messes with the other direction
-#	print(rad2deg(acos((player.position - position).normalized().dot(Vector2(1, 0)))))
-
-
-#put the negative and the posetives together, if sight_angle >= 0 "do this"/ elif sight angle <= 0 "do that"
-
 	#cone right
 	if sight_angle == 0.0:
 		if player.position.angle_to_point(position) <= deg2rad(45) && player.position.angle_to_point(position) >= deg2rad(-45):
@@ -128,7 +105,7 @@ func is_player_in_vision(): #this should be a bool
 					$CanvasLayer/button_prompt.visible = false
 					if player.is_stealing == true:
 						player.cancel_stealing()
-						notice_value += 50
+						suspicion_value += 50
 						event_handler.emit_signal("alert_guards")
 						$exclamation_anim.play("exclamation_anim")
 	
@@ -142,7 +119,7 @@ func is_player_in_vision(): #this should be a bool
 					$CanvasLayer/button_prompt.visible = false
 					if player.is_stealing == true:
 						player.cancel_stealing()
-						notice_value += 50
+						suspicion_value += 50
 						event_handler.emit_signal("alert_guards")
 						$exclamation_anim.play("exclamation_anim")
 	#cone up
@@ -154,7 +131,7 @@ func is_player_in_vision(): #this should be a bool
 					$CanvasLayer/button_prompt.visible = false
 					if player.is_stealing == true:
 						player.cancel_stealing()
-						notice_value += 50
+						suspicion_value += 50
 						event_handler.emit_signal("alert_guards")
 						$exclamation_anim.play("exclamation_anim")
 	#cone down
@@ -166,35 +143,9 @@ func is_player_in_vision(): #this should be a bool
 					$CanvasLayer/button_prompt.visible = false
 					if player.is_stealing == true:
 						player.cancel_stealing()
-						notice_value += 50
+						suspicion_value += 50
 						event_handler.emit_signal("alert_guards")
 						$exclamation_anim.play("exclamation_anim")
-	
-	
-#	if player.position.angle_to_point(position) <= deg2rad(sight_angle + 45) && player.position.angle_to_point(position) >= deg2rad(sight_angle - 45):
-#		var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
-##		print("in vision cone")
-#		if !ray.empty():
-#			if ray.collider.is_in_group("player"):
-#				$CanvasLayer/button_prompt.visible = false
-#				if player.is_stealing == true:
-#					player.cancel_stealing()
-#					print("Hey what are you doing")
-
-
-
-
-
-#	elif player.position.angle_to_point(position) <= deg2rad(-sight_angle + 45) && player.position.angle_to_point(position) >= deg2rad(-sight_angle - 45):
-#		var ray = get_world_2d().direct_space_state.intersect_ray(position, player.position, [self])
-##		print("in vision cone")
-#		if !ray.empty():
-#			if ray.collider.is_in_group("player"):
-#				$CanvasLayer/button_prompt.visible = false
-#				if player.is_stealing == true:
-#					player.cancel_stealing()
-#					print("Hey what are you doing")
-				#add suspicion level if you have more then 2-3 all guard are immediately alerted
 	pass
 
 func get_ray_cast():
@@ -211,12 +162,7 @@ func get_ray_cast():
 	pass
 
 func _draw():
-#	draw_circle(to_local(hit_point), 5.0, Color.blue)
-#	draw_circle(to_local(global_position), 5.0, Color.blue)
-#	draw_line(to_local(position), (to_local(position) + Vector2.UP * ray_length).rotated(deg2rad(angle)), Color.red, 3.0, true)
-#	draw_line(to_local(position), (to_local(position) + velocity), Color.green, 3.0, true)
-	
-	###---draw vision cone---###
+	###---draw vision cone arc---###
 	draw_arc(to_local(position), 40.0, deg2rad(sight_angle + 45), deg2rad(sight_angle - 45), 10,Color.orange, 3.0, true) #0.0 when right 180 when left
 	pass
 

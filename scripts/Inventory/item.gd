@@ -11,6 +11,8 @@ var item_width;
 var picked = false
 
 func _ready():
+	rect_min_size = Vector2(32, 32)
+	expand = true
 	pass
 	
 func _init(_item_name, _item_value, _item_width = 60.0):

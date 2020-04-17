@@ -12,8 +12,6 @@ func update(_delta : float):
 	patrol(_delta)
 	set_animation()
 	
-	print(owner.name)
-	
 	owner.velocity += owner.steering
 	owner.velocity = owner.velocity.normalized() * speed
 	owner.velocity = owner.move_and_slide(owner.velocity)
@@ -23,7 +21,6 @@ func handle_input(_event):
 	pass
 	
 func patrol(_delta):
-	print(owner.patrole_path)
 	if owner.patrole_path == null:
 		return
 	

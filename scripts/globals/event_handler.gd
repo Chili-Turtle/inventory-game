@@ -16,4 +16,6 @@ signal alert_guards()
 signal start_canvas_shake(trauma)
 signal start_camera_shake(trauma)
 
-signal display_dialogue(dialogue)
+signal load_dialogue(dialogue, _name)
+signal show_dialogue()
+signal dialogue_finished()

@@ -1,0 +1,238 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://scenes/debugging/debugging_panel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/GUI/inventory_space.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/GUI/dialogue.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scripts/GUI/player_hp.gd" type="Script" id=5]
+[ext_resource path="res://scripts/path_creator.gd" type="Script" id=6]
+[ext_resource path="res://audio/SFX/FX01.wav" type="AudioStream" id=8]
+[ext_resource path="res://sprites/vignette texture trans.png" type="Texture" id=9]
+[ext_resource path="res://audio/SFX/BombTrouht.wav" type="AudioStream" id=10]
+[ext_resource path="res://scripts/GUI/Canvas_shake.gd" type="Script" id=11]
+
+[sub_resource type="Animation" id=1]
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("RichTextLabel:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("button_prompt:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.7, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[node name="CanvasLayer" type="CanvasLayer"]
+layer = 2
+script = ExtResource( 11 )
+
+[node name="vignette" type="TextureRect" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource( 9 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="vignette"]
+anims/vignette_fade_in = SubResource( 1 )
+anims/vignette_fade_out = SubResource( 2 )
+
+[node name="debugging_panel" parent="." instance=ExtResource( 1 )]
+
+[node name="inventory_space" parent="." instance=ExtResource( 2 )]
+margin_top = -0.857361
+margin_bottom = 593.143
+
+[node name="Line2D" type="Line2D" parent="inventory_space"]
+width = 60.0
+joint_mode = 1
+sharp_limit = 10.0
+antialiased = true
+script = ExtResource( 6 )
+
+[node name="notice_bar" type="ProgressBar" parent="inventory_space"]
+self_modulate = Color( 1, 0.843137, 0, 1 )
+margin_left = 50.3926
+margin_top = 20.8173
+margin_right = 123.393
+margin_bottom = 45.8173
+custom_colors/font_color = Color( 0.329412, 0.823529, 0.12549, 1 )
+value = 60.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="inventory_space/notice_bar"]
+margin_left = 77.2717
+margin_top = 6.48434
+margin_right = 183.272
+margin_bottom = 20.4843
+text = "suspicion"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="inventory_space"]
+stream = ExtResource( 10 )
+
+[node name="invincibility_timer" type="Timer" parent="inventory_space"]
+wait_time = 0.4
+one_shot = true
+
+[node name="steal_audio" type="AudioStreamPlayer" parent="inventory_space"]
+stream = ExtResource( 8 )
+
+[node name="dialogue" parent="." instance=ExtResource( 3 )]
+visible = false
+margin_left = -353.791
+margin_top = 47.9562
+margin_right = 358.209
+margin_bottom = 140.957
+
+[node name="player_hp" type="ProgressBar" parent="."]
+margin_left = 28.3535
+margin_top = 23.7399
+margin_right = 116.354
+margin_bottom = 43.7399
+max_value = 3.0
+step = 0.1
+value = 3.0
+rounded = true
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="player_hp"]
+margin_left = 93.0
+margin_top = 4.0
+margin_right = 133.0
+margin_bottom = 35.0
+text = "HP
+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="player_sprint_bar" type="ProgressBar" parent="."]
+self_modulate = Color( 0.0784314, 1, 0, 1 )
+margin_left = 28.0
+margin_top = 49.0
+margin_right = 90.0
+margin_bottom = 63.0
+step = 0.1
+value = 100.0
+rounded = true
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="player_sprint_bar"]
+margin_left = 64.9573
+margin_top = 0.63736
+margin_right = 104.957
+margin_bottom = 14.6374
+text = "stamina
+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="game_over" type="ColorRect" parent="."]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="game_over"]
+self_modulate = Color( 1, 1, 1, 0 )
+margin_left = 440.263
+margin_top = 282.473
+margin_right = 662.263
+margin_bottom = 335.473
+bbcode_enabled = true
+bbcode_text = "[wave]You got captured[/wave]"
+text = "You got captured"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="button_prompt" type="RichTextLabel" parent="game_over"]
+self_modulate = Color( 1, 1, 1, 0 )
+margin_left = 452.902
+margin_top = 351.337
+margin_right = 587.902
+margin_bottom = 444.337
+text = "R = restart
+T = main menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="game_over"]
+anims/fade_in = SubResource( 3 )
+[connection signal="timeout" from="inventory_space/invincibility_timer" to="inventory_space" method="_on_invincibility_timer_timeout"]

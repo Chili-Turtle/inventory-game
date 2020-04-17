@@ -4,7 +4,7 @@ var current_color : Color
 var current_boarder_color : Color
 
 var orange : Color = Color(0.6, 0.2, 0.0, 0.5)
-var red : Color = Color(0.8, 0.0, 0.0, 0.5)
+var red : Color = Color(0.8, 0.0, 0.0, 0.3)
 var boarder_red : Color = Color(1.0, 0.0, 0.0, 0.5)
 
 export(float) var radius : float = 60.0
@@ -18,8 +18,12 @@ func _ready():
 	pass
 
 func _draw():
-	draw_circle_arc_poly(position, radius, owner.sight_angle +45, owner.sight_angle -45, current_color)
-	draw_arc(position, 60.0, deg2rad(owner.sight_angle+45), deg2rad(owner.sight_angle-45), 10, current_boarder_color, 2.0, true)
+	
+	if owner.alerted == true:
+		draw_circle_arc_poly(position, radius, 0, 360, red)
+	else:
+		draw_arc(position, 60.0, deg2rad(owner.sight_angle+45), deg2rad(owner.sight_angle-45), 10, current_boarder_color, 2.0, true)
+		draw_circle_arc_poly(position, radius, owner.sight_angle +45, owner.sight_angle -45, current_color)
 	
 	pass
 

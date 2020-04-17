@@ -10,16 +10,12 @@ func exit():
 	
 func update(_delta : float):
 	set_animation()
+	steering(_delta)
 	
 	owner.velocity = owner.direction * speed
+	owner.velocity += owner.steering
 	owner.velocity = owner.move_and_slide(owner.velocity)
-	
 	pass
-	
-	
-#		if rad2deg(owner.direction.angle_to(Vector2.RIGHT)) <= 45.0 && rad2deg(owner.direction.angle_to(Vector2.RIGHT)) >= -45.0:
-#		owner.get_node("AnimationPlayer").play("npc_right")
-#		owner.sight_angle = 0.0
 
 func set_animation():
 	if rad2deg(owner.direction.angle_to(Vector2.RIGHT)) <= 45.0 && rad2deg(owner.direction.angle_to(Vector2.RIGHT)) >= -45.0:
@@ -38,3 +34,11 @@ func set_animation():
 
 func handle_input(_event):
 	pass
+
+func steering(_delta):
+	if owner.get_rot_ray_cast() != null:
+		if !owner.get_rot_ray_cast().empty():
+			owner.steering = (owner.position - owner.get_rot_ray_cast().position).normalized() * 5.0
+			owner.steering = Vector2().linear_interpolate(owner.steering, _delta * 15.0)
+	else:
+		owner.steering = owner.steering.linear_interpolate(Vector2(), _delta * 5.0)

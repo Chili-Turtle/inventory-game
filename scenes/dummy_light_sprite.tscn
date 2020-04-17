@@ -3,7 +3,6 @@
 [ext_resource path="res://sprites/lights/laigter_fixed.png" type="Texture" id=1]
 [ext_resource path="res://sprites/medieval tileset interior.png" type="Texture" id=2]
 
-
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -111.376, -79.3368, -111.084, -65.0294, -96.7769, -65.0294, -96.1929, -79.6288 )
 

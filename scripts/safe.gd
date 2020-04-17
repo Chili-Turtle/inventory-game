@@ -10,16 +10,16 @@ func _on_Area2D_body_entered(body):
 	if body.is_in_group("player"):
 		show_inventory(body)
 		for index in body.inventory:
-			if body.inventory[index] == "sword" && is_looted == false:
-				body.add_item("hammer")
-				event_handler.emit_signal("display_dialogue", "You received a hammer")
+			if body.inventory[index] == "key" && is_looted == false:
+				body.add_item("jewel")
+				event_handler.emit_signal("load_dialogue", "I received a jewel", "You")
 				inventory_gui.queue_free()
 				show_inventory(body)
 				is_looted = true
 				break
 
 		if is_looted == false:
-			event_handler.emit_signal("display_dialogue", "I NEED A KEY")
+			event_handler.emit_signal("load_dialogue", "I NEED A KEY", "You")
 	pass
 
 func _on_Area2D_body_exited(body):

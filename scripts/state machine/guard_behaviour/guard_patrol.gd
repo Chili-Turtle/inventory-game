@@ -1,7 +1,11 @@
 extends "res://scripts/state machine/state.gd"
 
+var bar_music = load("res://audio/music/bar_music_1.wav")
+
 func enter():
 	owner.get_node("state_machine").change_state("move")
+	
+	MM.play_music(bar_music)
 	pass
 	
 func exit():

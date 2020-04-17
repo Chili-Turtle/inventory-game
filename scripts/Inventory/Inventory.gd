@@ -53,6 +53,9 @@ func _on_pick_pocket_started(_npc, _player):
 	npc = _npc
 	player = _player
 	
+	$Line2D.is_started = false
+	$Line2D.is_checked = false
+	
 	get_parent().get_node("vignette").visible = true
 	get_parent().get_node("vignette/AnimationPlayer").play("vignette_fade_in")
 	
@@ -67,7 +70,7 @@ func _on_pick_pocket_started(_npc, _player):
 			inventory_gui_npc.name = "npc_inventory"
 			init_slots(gui_inv)
 			$notice_bar.visible = true
-			$notice_bar.value = npc.notice_value
+			$notice_bar.value = npc.suspicion_value
 			for key in npc.inventory:
 				if npc.inventory[key] != null:
 					add_item(gui_inv, npc.inventory[key])
@@ -92,7 +95,9 @@ func _on_pick_pocket_ended(_npc, _player):
 	if inventory_gui_player == null:
 		return
 
+	is_pocketing = false
 	get_parent().get_node("vignette/AnimationPlayer").play("vignette_fade_out")
+	$Line2D.is_started = false
 	inventory_gui_player.call_deferred("queue_free")
 	inventory_gui_npc.call_deferred("queue_free")
 	$notice_bar.visible = false
@@ -133,7 +138,8 @@ func add_item(_gui_inv, item_name : String): #add item to the dic and slot // sh
 			var item_area = Area2D.new()
 			item.add_child(item_area)
 			item_area.add_to_group("item")
-			item_area.position +=item.rect_size/2.0
+			item_area.position += slot.rect_size/2.0
+			slot.force_update_transform()
 			var shape = CollisionShape2D.new()
 			item_area.add_child(shape)
 			shape.shape = CircleShape2D.new()
@@ -180,7 +186,8 @@ func _on_item_slot_pressed(slot):
 				return
 			
 			slot.item = selected_item
-			
+			$Line2D.is_started = false
+			$Line2D.is_checked = false
 			
 			#remove_child
 			match slot.get_node("../../../..").name:
@@ -193,6 +200,7 @@ func _on_item_slot_pressed(slot):
 						
 					is_locked = true
 					player.add_item(slot.item.item_name)
+			
 			
 			remove_child(selected_item)
 			slot.add_child(selected_item)
@@ -274,7 +282,7 @@ func on_bumped_in(area):
 	if npc != null && is_pocketing == true && is_invincible == false:
 		if area.is_in_group("item"):
 			event_handler.emit_signal("start_canvas_shake", 0.5)
-			npc.notice_value += 10.0
+			npc.suspicion_value += 20.0
 			$AudioStreamPlayer.play()
 			is_invincible = true
 			$invincibility_timer.start()
@@ -346,6 +354,8 @@ func start_pocketing():
 	pass
 	
 func on_pocketing_canceled():
+	$Line2D.is_started = false
+	$Line2D.is_checked = false
 	is_pocketing = false
 	is_locked = true
 	pass
@@ -358,19 +368,17 @@ func on_pocketing_ended():
 #connect signal or bool
 func _process(delta):
 	if npc != null && is_pocketing == true:
-		npc.notice_value += delta * 1.0
-		$notice_bar.value = npc.notice_value
+		npc.suspicion_value += delta * 6.0
+		$notice_bar.value = npc.suspicion_value
 		
-		if npc.notice_value >= $notice_bar.max_value:
-			npc.on_pick_pocket_noticed()
+		if npc.suspicion_value >= $notice_bar.max_value:
+			player.cancel_stealing()
 		pass
 	
 	if selected_item != null:
 		selected_item.rect_global_position = get_global_mouse_position() + mouse_offset
 		pass
 	pass
-
-
 
 func _on_invincibility_timer_timeout():
 	is_invincible = false

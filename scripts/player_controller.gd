@@ -67,7 +67,7 @@ func init_inventory():
 	pass
 
 func _on_pick_pocket_range_body_entered(body):
-	if body.is_in_group("stealable"):
+	if body.is_in_group("stealable") && body.can_steal == true:
 		can_steal = true
 		steal_target = body
 	pass
@@ -106,6 +106,7 @@ func add_item(item_name):
 	for key in inventory:
 		if inventory[key] == null:
 			inventory[key] = item_name
+			current_inventory_space += 1
 			return
 	print("inventory is full")
 	pass

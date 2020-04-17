@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/start_stealing.wav-b92f30770ff493b9934c44f2aa3c81b9.sample"
+
+[deps]
+
+source_file="res://audio/SFX/start_stealing.wav"
+dest_files=[ "res://.import/start_stealing.wav-b92f30770ff493b9934c44f2aa3c81b9.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

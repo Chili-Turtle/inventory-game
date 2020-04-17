@@ -4,55 +4,69 @@ onready var label = $MarginContainer/RichTextLabel
 
 var dialogue : String
 
-var is_on_screen : bool = false
+var dialogue_list : Array = []
+var name_list : Array = []
+
+var is_running : bool = false
+var on_screen : bool = false
 
 func _ready():
-	event_handler.connect("display_dialogue", self, "start_dialogue")
+	event_handler.connect("load_dialogue", self, "on_load_dialogue")
+	event_handler.connect("show_dialogue", self, "on_show_dialogue")
 	visible = true
 	pass
 	
-func start_dialogue(_dialogue : String):
-	label.visible_characters = 0
-	dialogue = _dialogue
-	label.text = dialogue
+func on_load_dialogue(_dialogue : String, _name):
+	dialogue_list.append(_dialogue)
+	name_list.append(_name)
 	
-	if is_on_screen == false:
+	if is_running == false:
+		on_show_dialogue()
+		pass
+	pass
+	
+func on_show_dialogue(): #show dialogue
+	if !dialogue_list.empty():
+		label.visible_characters = 0
+		$Panel/name_panel/name.text = name_list.front()
+		label.text = dialogue_list.front()
+		is_running = true
 		$AnimationPlayer.play("move_in")
-	else:
-		$text_speed.start()
+	pass
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "move_in":
 		$text_speed.start()
-		is_on_screen = true
-#		on_display_dialogue()
-	
-#func on_display_dialogue():
-#	$text_speed.start()
-#	label.text = dialogue
-#	pass
-	
+		on_screen = true
+		pass
+
 func _input(event):
 	if Input.is_action_just_pressed("interact"):
-		end_dialogue()
+			
+		if !dialogue_list.empty():
+			if label.visible_characters <= dialogue_list.front().length() && is_running == true:
+				label.visible_characters = dialogue_list.front().length()
+			else:
+				on_show_dialogue()
+		else:
+			end_dialogue()
 	pass
 
 func end_dialogue():
-	if label.visible_characters >= dialogue.length() and dialogue != "":
-		dialogue = ""
+	if on_screen == true:
 		$AnimationPlayer.play("move_out")
-		is_on_screen = false
-	else:
-		label.visible_characters = dialogue.length()
-		
-	$MarginContainer/RichTextLabel/end_dialogue.visible = true
-	
+		event_handler.emit_signal("dialogue_finished")
+		on_screen = false
 	pass
 
 func _on_text_speed_timeout():
 	label.visible_characters += 1
-	
-	if label.visible_characters >= dialogue.length():
+
+	if label.visible_characters >= dialogue_list.front().length():
 		$text_speed.stop()
 		$MarginContainer/RichTextLabel/end_dialogue.visible = true
+		is_running = false
+		
+		name_list.pop_front()
+		dialogue_list.pop_front()
 	pass

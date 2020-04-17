@@ -4,6 +4,9 @@ var is_started : bool = false
 var is_checked : bool = false
 var is_ended : bool = false
 
+var start_sound = load("res://audio/SFX/start_stealing.wav")
+var cancel_sound = load("res://audio/SFX/stop_stealing.wav")
+
 func _ready():
 	clear_points()
 	pass
@@ -129,23 +132,21 @@ func on_bumped_in(area):
 	
 func on_pocketing_started(area): #on_pocketing_checkpoint
 	if area.is_in_group("item"):
-		#restart start if you put down item
-		
-		#start timer of npc
 		
 		is_started = !is_started
 		if is_started == true:
 #			print("pocketing started")
 			event_handler.emit_signal("pocketing_started")
+			get_parent().get_node("steal_audio").stream = start_sound 
+			get_parent().get_node("steal_audio").play()
 			#start timer when on path
 		elif is_started == false:
 			event_handler.emit_signal("pocketing_canceled")
+			get_parent().get_node("steal_audio").stream = cancel_sound
+			get_parent().get_node("steal_audio").play()
 			is_checked = false
 			is_started = false
 			pass
-#			print("pocketing ended")
-			#maybe stop the timer
-#			event_handler.emit_signal("pocketing_canceled")
 	pass
 
 func on_pocketing_checkpoint(area):
@@ -168,7 +169,7 @@ func on_pocketing_ended(area):
 			print("you cheated buuuh")
 			#cancel stealing attempt
 		elif is_started == false:
-#			print("you have to go trough the path")
+			print("you have to go trough the path")
 			pass
 	
 func clear_path():
@@ -190,52 +191,53 @@ func clear_path():
 	pass
 	
 func _draw():
-	if points.empty() == true:
-		return
-	#og line2D poitns
-	var last_point : Vector2 = points[0]
-	var dir = last_point - points[1]
-	for i in range(1, get_point_count()):
-		draw_line(points[i-1], points[i], Color.red, 5.0, false)
-	
-	#create boundary points
-	var deg_90 = 90.0
-	for u in range(0,2):
-		if u >= 1:
-			deg_90 = deg_90 * -1
-
-		var direction = []
-		var dir_rot_90 = []
-		var trans_point = []
-		for i in range(0, get_point_count()):
-			#beginn cap
-			if i == 0:
-				#get direction
-				direction.append((points[i] - points[i + 1]).normalized())
-				#rotate direction 90 deg
-				dir_rot_90.append(direction[i].rotated(deg2rad(deg_90)))
-				#draw first point
-				trans_point.append(points[i] + dir_rot_90[i] * (width * 0.5))
-				draw_circle(trans_point[i], 5.0, Color.blue)
-				continue
-			#end cap
-			if i == get_point_count() - 1:
-				#calc the rotated direction
-				trans_point.append(points[i] + dir_rot_90[i-1] * (width * 0.5)) #30.0 is the width of the path
-				draw_circle(trans_point[i], 5.0, Color.blue)
-				continue
-			#get direction
-			direction.append((points[i] - points[i + 1]).normalized())
-			#rotate direction 90 deg
-			dir_rot_90.append(direction[i].rotated(deg2rad(deg_90)))
-			#get the theta angle
-			var angle_theta_rad = (dir_rot_90[i-1].angle_to(dir_rot_90[i])) * 0.5
-			#calc the vector theta
-			var dir_rot_theta = dir_rot_90[i-1].rotated(angle_theta_rad)
-			#calc the alpha angle for the length
-			var angle_alpha_deg = 90 - rad2deg(angle_theta_rad)
-			#calc the length of the triangle
-			var length = (width * 0.5) / sin(deg2rad(angle_alpha_deg))
-			#draw point
-			trans_point.append(points[i] + dir_rot_theta * length)
-			draw_circle(trans_point[i], 5.0, Color.blue)
+#	if points.empty() == true:
+#		return
+#	#og line2D poitns
+#	var last_point : Vector2 = points[0]
+#	var dir = last_point - points[1]
+#	for i in range(1, get_point_count()):
+#		draw_line(points[i-1], points[i], Color.red, 5.0, false)
+#
+#	#create boundary points
+#	var deg_90 = 90.0
+#	for u in range(0,2):
+#		if u >= 1:
+#			deg_90 = deg_90 * -1
+#
+#		var direction = []
+#		var dir_rot_90 = []
+#		var trans_point = []
+#		for i in range(0, get_point_count()):
+#			#beginn cap
+#			if i == 0:
+#				#get direction
+#				direction.append((points[i] - points[i + 1]).normalized())
+#				#rotate direction 90 deg
+#				dir_rot_90.append(direction[i].rotated(deg2rad(deg_90)))
+#				#draw first point
+#				trans_point.append(points[i] + dir_rot_90[i] * (width * 0.5))
+#				draw_circle(trans_point[i], 5.0, Color.blue)
+#				continue
+#			#end cap
+#			if i == get_point_count() - 1:
+#				#calc the rotated direction
+#				trans_point.append(points[i] + dir_rot_90[i-1] * (width * 0.5)) #30.0 is the width of the path
+#				draw_circle(trans_point[i], 5.0, Color.blue)
+#				continue
+#			#get direction
+#			direction.append((points[i] - points[i + 1]).normalized())
+#			#rotate direction 90 deg
+#			dir_rot_90.append(direction[i].rotated(deg2rad(deg_90)))
+#			#get the theta angle
+#			var angle_theta_rad = (dir_rot_90[i-1].angle_to(dir_rot_90[i])) * 0.5
+#			#calc the vector theta
+#			var dir_rot_theta = dir_rot_90[i-1].rotated(angle_theta_rad)
+#			#calc the alpha angle for the length
+#			var angle_alpha_deg = 90 - rad2deg(angle_theta_rad)
+#			#calc the length of the triangle
+#			var length = (width * 0.5) / sin(deg2rad(angle_alpha_deg))
+#			#draw point
+#			trans_point.append(points[i] + dir_rot_theta * length)
+#			draw_circle(trans_point[i], 5.0, Color.blue)
+			pass

@@ -21,7 +21,7 @@ radius = 8.0
 resource_name = "guard_down"
 length = 0.3
 tracks/0/type = "value"
-tracks/0/path = NodePath("npc_sprite:frame")
+tracks/0/path = NodePath("guard_sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -36,7 +36,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id=3]
 length = 0.3
 tracks/0/type = "value"
-tracks/0/path = NodePath("npc_sprite:frame")
+tracks/0/path = NodePath("guard_sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -51,7 +51,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id=4]
 length = 0.3
 tracks/0/type = "value"
-tracks/0/path = NodePath("npc_sprite:frame")
+tracks/0/path = NodePath("guard_sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -67,7 +67,7 @@ tracks/0/keys = {
 resource_name = "guard_up"
 length = 0.3
 tracks/0/type = "value"
-tracks/0/path = NodePath("npc_sprite:frame")
+tracks/0/path = NodePath("guard_sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -98,7 +98,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( -7.444, 0 ), Vector2( -7.44366, -23.8328 ), Vector2( -7.44366, -33.512 ), Vector2( -7.44366, -23.8328 ) ]
+"values": [ Vector2( -7.444, 0 ), Vector2( -7.444, -8.28117 ), Vector2( -7.444, -13.0658 ), Vector2( -7.444, -8.28117 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("CanvasLayer/exclamation_mark:modulate")
@@ -122,7 +122,7 @@ script = ExtResource( 2 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
-[node name="npc_sprite" type="Sprite" parent="."]
+[node name="guard_sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 normal_map = ExtResource( 9 )
 vframes = 4
@@ -191,7 +191,7 @@ script = ExtResource( 13 )
 stream = ExtResource( 11 )
 
 [node name="Position2D" type="Position2D" parent="."]
-position = Vector2( -7.444, 0 )
+position = Vector2( -7.444, -8.28117 )
 scale = Vector2( 1.77825, 1.62451 )
 
 [node name="gui_animation" type="AnimationPlayer" parent="."]

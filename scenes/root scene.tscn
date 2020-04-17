@@ -1,21 +1,14 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://scripts/root_scene.gd" type="Script" id=1]
-[ext_resource path="res://scenes/GUI/inventory_space.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/CanvasLayer.tscn" type="PackedScene" id=2]
 [ext_resource path="res://tilessets/decorations.tres" type="TileSet" id=3]
 [ext_resource path="res://scenes/guard.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scripts/path_creator.gd" type="Script" id=5]
 [ext_resource path="res://scenes/light_comb.tscn" type="PackedScene" id=6]
-[ext_resource path="res://scenes/dummy_light_sprite.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/exit.tscn" type="PackedScene" id=7]
 [ext_resource path="res://sprites/lights/texture_white.jpg" type="Texture" id=8]
-[ext_resource path="res://scenes/debugging/debugging_panel.tscn" type="PackedScene" id=9]
-[ext_resource path="res://scenes/GUI/dialogue.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scripts/camera_controller.gd" type="Script" id=11]
-[ext_resource path="res://scripts/GUI/player_hp.gd" type="Script" id=12]
-[ext_resource path="res://scripts/GUI/Canvas_shake.gd" type="Script" id=13]
-[ext_resource path="res://sprites/vignette texture trans.png" type="Texture" id=14]
 [ext_resource path="res://scenes/safe.tscn" type="PackedScene" id=15]
-[ext_resource path="res://audio/SFX/BombTrouht.wav" type="AudioStream" id=16]
 [ext_resource path="res://scenes/torch.tscn" type="PackedScene" id=17]
 [ext_resource path="res://scenes/npc_2.tscn" type="PackedScene" id=19]
 [ext_resource path="res://scenes/player/player.tscn" type="PackedScene" id=20]
@@ -42,60 +35,9 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 214.124, 353.51, 0, 0, 0, 0, 220.427, 331.763, 0, 0, 0, 0, 247.528, 318.528, 0, 0, 0, 0, 307.249, 325.305, 0, 0, 0, 0, 315.51, 344.331, 0, 0, 0, 0, 316.225, 377.141, 0, 0, 0, 0, 318.116, 407.393, 0, 0, 0, 0, 222.281, 402.04, 0, 0, 0, 0, 215.348, 357.588 )
 }
 
-[sub_resource type="Animation" id=5]
-length = 0.3
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
-}
-
-[sub_resource type="Animation" id=6]
-length = 0.3
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
-}
-
-[sub_resource type="Animation" id=7]
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("RichTextLabel:self_modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.5, 1 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+[sub_resource type="Curve2D" id=5]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 333.99, 528.153, 0, 0, 0, 0, 296.529, 527.472, 0, 0, 0, 0, 296.426, 487.228, 0, 0, 0, 0, 267.867, 487.101, 0, 0, 0, 0, 268.262, 527.131, 0, 0, 0, 0, 207.302, 527.131, 0, 0, 0, 0, 208.664, 565.955, 0, 0, 0, 0, 379.285, 565.274, 0, 0, 0, 0, 379.966, 527.812, 0, 0, 0, 0, 338.758, 528.153 )
 }
 
 [node name="root scene" type="Node2D"]
@@ -137,10 +79,14 @@ curve = SubResource( 3 )
 [node name="guard_2_path" type="Path2D" parent="bar 1/layer_1"]
 curve = SubResource( 4 )
 
+[node name="guard_3_path" type="Path2D" parent="bar 1/layer_1"]
+curve = SubResource( 5 )
+
 [node name="npc_container_1" type="Node2D" parent="bar 1/layer_1"]
 
 [node name="npc_2" parent="bar 1/layer_1/npc_container_1" instance=ExtResource( 19 )]
 position = Vector2( 288.879, 325.407 )
+item_to_add = [ "coin", "key" ]
 patrole_path = NodePath("../../npc_2_path")
 
 [node name="guard" parent="bar 1/layer_1" instance=ExtResource( 4 )]
@@ -151,10 +97,15 @@ patrole_path = NodePath("../guard_1_path")
 position = Vector2( 310.843, 402.157 )
 patrole_path = NodePath("../guard_2_path")
 
+[node name="guard3" parent="bar 1/layer_1" instance=ExtResource( 4 )]
+position = Vector2( 320.841, 526.464 )
+patrole_path = NodePath("../guard_3_path")
+
 [node name="npc_container" type="Node2D" parent="bar 1/layer_1"]
 
 [node name="npc_2" parent="bar 1/layer_1/npc_container" instance=ExtResource( 19 )]
 position = Vector2( 280.347, 216.198 )
+item_to_add = [ "coin", "coin" ]
 patrole_path = NodePath("../../npc_1_path")
 
 [node name="npc_sprite" parent="bar 1/layer_1/npc_container/npc_2" index="1"]
@@ -184,15 +135,14 @@ position = Vector2( 50.0815, 496.189 )
 [node name="player" parent="bar 1" instance=ExtResource( 20 )]
 position = Vector2( 402.753, 72.4098 )
 
+[node name="exit" parent="bar 1" instance=ExtResource( 7 )]
+
 [node name="light_comb" parent="." instance=ExtResource( 6 )]
 material = null
 position = Vector2( 112.252, 37.0519 )
 
 [node name="light_comb4" parent="." instance=ExtResource( 6 )]
 position = Vector2( 332.322, 37.2534 )
-
-[node name="light_comb5" parent="." instance=ExtResource( 6 )]
-position = Vector2( 465.406, 312.342 )
 
 [node name="light_comb8" parent="." instance=ExtResource( 6 )]
 position = Vector2( 21.2311, 352.329 )
@@ -212,184 +162,14 @@ mode = 2
 range_height = 2048.0
 shadow_color = Color( 0.45098, 0.45098, 0.45098, 1 )
 
-[node name="Sprite" parent="." instance=ExtResource( 7 )]
-position = Vector2( 1239.59, 192.114 )
-normal_map = null
+[node name="CanvasLayer" parent="." instance=ExtResource( 2 )]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-layer = 2
-script = ExtResource( 13 )
-
-[node name="vignette" type="TextureRect" parent="CanvasLayer"]
-modulate = Color( 1, 1, 1, 0 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = ExtResource( 14 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/vignette"]
-anims/vignette_fade_in = SubResource( 5 )
-anims/vignette_fade_out = SubResource( 6 )
-
-[node name="debugging_panel" parent="CanvasLayer" instance=ExtResource( 9 )]
-
-[node name="inventory_space" parent="CanvasLayer" instance=ExtResource( 2 )]
-margin_top = -0.857361
-margin_bottom = 593.143
-
-[node name="Line2D" type="Line2D" parent="CanvasLayer/inventory_space"]
-width = 60.0
-joint_mode = 1
-sharp_limit = 10.0
-antialiased = true
-script = ExtResource( 5 )
-
-[node name="Line2D2" type="Line2D" parent="CanvasLayer/inventory_space"]
-position = Vector2( -67.5544, 333.095 )
-points = PoolVector2Array( 636.713, 93.0614, 825.517, 93.061, 825.517, 203.558, 934.657, 207.323, 933.261, 135.394 )
-width = 60.0
-script = ExtResource( 5 )
-
-[node name="notice_bar" type="ProgressBar" parent="CanvasLayer/inventory_space"]
-self_modulate = Color( 1, 0.843137, 0, 1 )
-margin_left = 50.3926
-margin_top = 20.8173
-margin_right = 123.393
-margin_bottom = 45.8173
-custom_colors/font_color = Color( 0.329412, 0.823529, 0.12549, 1 )
-value = 60.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="CanvasLayer/inventory_space/notice_bar"]
-margin_left = 77.2717
-margin_top = 6.48434
-margin_right = 183.272
-margin_bottom = 20.4843
-text = "detection/notice"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="CanvasLayer/inventory_space"]
-stream = ExtResource( 16 )
-
-[node name="invincibility_timer" type="Timer" parent="CanvasLayer/inventory_space"]
-wait_time = 0.2
-one_shot = true
-
-[node name="TextureProgress" type="TextureProgress" parent="CanvasLayer"]
-margin_left = 1470.96
-margin_top = 36.3813
-margin_right = 1532.96
-margin_bottom = 96.3813
-value = 32.0
-texture_progress = ExtResource( 8 )
-fill_mode = 4
-tint_under = Color( 0.0823529, 0.0823529, 0.0823529, 1 )
-tint_progress = Color( 0.12549, 0.756863, 0.168627, 1 )
-nine_patch_stretch = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="dialogue" parent="CanvasLayer" instance=ExtResource( 10 )]
+[node name="debugging_panel" parent="CanvasLayer" index="1"]
 visible = false
-margin_left = -353.791
-margin_top = 47.9562
-margin_right = 358.209
-margin_bottom = 140.957
 
-[node name="player_hp" type="ProgressBar" parent="CanvasLayer"]
-margin_left = 28.3535
-margin_top = 23.7399
-margin_right = 116.354
-margin_bottom = 43.7399
-max_value = 3.0
-step = 0.1
-value = 3.0
-rounded = true
-script = ExtResource( 12 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="CanvasLayer/player_hp"]
-margin_left = 93.0
-margin_top = 4.0
-margin_right = 133.0
-margin_bottom = 35.0
-text = "HP
-"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="player_sprint_bar" type="ProgressBar" parent="CanvasLayer"]
-self_modulate = Color( 0.0784314, 1, 0, 1 )
-margin_left = 28.0
-margin_top = 49.0
-margin_right = 90.0
-margin_bottom = 63.0
-step = 0.1
-value = 100.0
-rounded = true
-script = ExtResource( 12 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="CanvasLayer/player_sprint_bar"]
-margin_left = 64.9573
-margin_top = 0.63736
-margin_right = 104.957
-margin_bottom = 14.6374
-text = "stamina
-"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="game_over" type="ColorRect" parent="CanvasLayer"]
-pause_mode = 2
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/game_over"]
-self_modulate = Color( 1, 1, 1, 0 )
-margin_left = 440.263
-margin_top = 282.473
-margin_right = 662.263
-margin_bottom = 335.473
-bbcode_enabled = true
-bbcode_text = "[wave]You got captured[/wave]"
-text = "You got captured"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="button_prompt" type="RichTextLabel" parent="CanvasLayer/game_over"]
-margin_left = 470.169
-margin_top = 351.163
-margin_right = 692.169
-margin_bottom = 404.163
-text = "R Restart
-T Main Menu"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/game_over"]
-anims/fade_in = SubResource( 7 )
+[node name="game_over" parent="CanvasLayer" index="6"]
+anchor_top = 0.0010504
+anchor_bottom = 1.00105
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 511.06, 297.069 )
@@ -397,7 +177,7 @@ rotating = true
 current = true
 script = ExtResource( 11 )
 [connection signal="ready" from="." to="." method="_on_root_scene_ready"]
-[connection signal="timeout" from="CanvasLayer/inventory_space/invincibility_timer" to="CanvasLayer/inventory_space" method="_on_invincibility_timer_timeout"]
-[connection signal="animation_finished" from="CanvasLayer/game_over/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 
 [editable path="bar 1/layer_1/npc_container/npc_2"]
+
+[editable path="CanvasLayer"]

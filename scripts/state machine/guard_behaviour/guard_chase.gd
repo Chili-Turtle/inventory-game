@@ -1,9 +1,13 @@
 extends "res://scripts/state machine/state.gd"
 
+var chase_clip = load("res://audio/music/chase_music_1.wav")
+
 func enter():
 	owner.get_node("state_machine").change_state("move")
 	
 	owner.get_node("AudioStreamPlayer").play()
+	
+	MM.play_music(chase_clip)
 	pass
 	
 func exit():

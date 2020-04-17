@@ -34,7 +34,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"points": PoolRealArray( 623.727, -0.25, 0, 0.25, 0, 487.405, -0.26, -61.6803, 0.26, 61.6803 ),
+"points": PoolRealArray( 700, -0.25, 0, 0.25, 0, 487.405, -0.26, -61.6803, 0.26, 61.6803 ),
 "times": PoolRealArray( 0, 0.5 )
 }
 
@@ -70,7 +70,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"points": PoolRealArray( 487.405, -0.14, 129.221, 0.14, -129.221, 623.727, -0.25, 0, 0.25, 0 ),
+"points": PoolRealArray( 487.405, -0.14, 129.221, 0.14, -129.221, 700, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0, 0.5 )
 }
 
@@ -82,7 +82,7 @@ anchor_bottom = 1.0
 margin_left = -356.0
 margin_top = -112.595
 margin_right = 356.0
-margin_bottom = -19.5946
+margin_bottom = -19.5944
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -91,6 +91,24 @@ __meta__ = {
 [node name="Panel" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="name_panel" type="Panel" parent="Panel"]
+margin_top = -31.0
+margin_right = 92.0
+margin_bottom = -5.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="name" type="Label" parent="Panel/name_panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Name"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -111,7 +129,6 @@ margin_left = 10.0
 margin_top = 10.0
 margin_right = 702.0
 margin_bottom = 83.0
-visible_characters = 0
 text = "This is a test dialogue Lorem ipsum style"
 __meta__ = {
 "_edit_use_anchors_": false

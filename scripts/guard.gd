@@ -14,6 +14,10 @@ var direction : Vector2
 
 var sight_angle = 0.0
 
+var angle = 0.0
+
+var steering : Vector2 = Vector2()
+
 var player = null
 
 var index = 0
@@ -34,6 +38,7 @@ func _ready():
 	pass
 	
 func _process(delta):
+	angle -= delta * 500.0
 	update()
 	player_in_vision_cone()
 	$CanvasLayer/exclamation_mark.rect_position = to_global($Position2D.position)
@@ -41,6 +46,9 @@ func _process(delta):
 	
 func on_alert_guards():
 	alerted = true
+	
+	#current_notice_angle
+	
 	$draw_node.current_color = $draw_node.red
 	$draw_node.current_boarder_color = $draw_node.boarder_red
 	pass
@@ -88,6 +96,21 @@ func player_in_vision_cone():
 #						alerted = true
 #						$gui_animation.play("alarm_anim")
 	pass
+
+
+func get_rot_ray_cast():
+	Physics2DServer.ray_shape_create()
+	var space_state = get_world_2d().direct_space_state
+	var result = space_state.intersect_ray(position, position + (Vector2.UP * 30.0).rotated(deg2rad(angle)), [self], collision_mask)
+	
+	if result.empty():
+		return
+	
+	hit_point = result.position
+	
+	return result
+	pass
+
 
 func get_ray_cast(target : Vector2):
 	Physics2DServer.ray_shape_create()
