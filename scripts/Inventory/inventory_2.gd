@@ -28,7 +28,6 @@ func gui_input(event, slot):
 #			get_tree().get_root().add_child(item) #move_child()
 			get_tree().get_root().get_node("bar 1/CanvasLayer").add_child_below_node(get_tree().get_root(), item)
 			holding_item = item
-			#print("I got pressed")
 			item.position = get_global_mouse_position()
 	pass
 

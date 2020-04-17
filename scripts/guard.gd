@@ -101,7 +101,7 @@ func player_in_vision_cone():
 func get_rot_ray_cast():
 	Physics2DServer.ray_shape_create()
 	var space_state = get_world_2d().direct_space_state
-	var result = space_state.intersect_ray(position, position + (Vector2.UP * 30.0).rotated(deg2rad(angle)), [self], collision_mask)
+	var result = space_state.intersect_ray(position, position + (Vector2.UP * 10.0).rotated(deg2rad(angle)), [self], collision_mask)
 	
 	if result.empty():
 		return

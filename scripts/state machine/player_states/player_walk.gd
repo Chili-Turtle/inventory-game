@@ -1,6 +1,6 @@
 extends "res://scripts/state machine/state.gd"
 
-var speed : float = 50.0
+var speed : float = 45.0
 
 func enter():
 	pass

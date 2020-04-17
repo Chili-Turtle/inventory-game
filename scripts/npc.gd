@@ -58,7 +58,6 @@ func init_inventory():
 	pass
 
 func add_item(item_name):
-	print(item_name)
 	for key in inventory:
 		if inventory[key] == null:
 			inventory[key] = item_name

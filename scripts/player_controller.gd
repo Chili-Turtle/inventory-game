@@ -47,7 +47,7 @@ func on_game_loaded():
 func _physics_process(delta):
 	update()
 	
-	sprint_value += delta * 100.0
+	sprint_value += delta * 30.0
 	sprint_value = clamp(sprint_value, 0.0, sprint_value_max)
 	event_handler.emit_signal("update_sprint", sprint_value)
 	

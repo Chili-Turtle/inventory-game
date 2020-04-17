@@ -41,6 +41,7 @@ _data = {
 }
 
 [node name="root scene" type="Node2D"]
+pause_mode = 2
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_vertical_guides_": [ -143.0 ]

@@ -1,6 +1,6 @@
 extends "res://scripts/state machine/state.gd"
 
-var speed : float = 300.0
+var speed : float = 180.0
 
 func enter():
 	$dash_timer.start()

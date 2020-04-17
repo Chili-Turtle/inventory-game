@@ -30,6 +30,6 @@ func load_scene():
 
 func _on_scene_animation_animation_finished(anim_name):
 	if anim_name == "cut_scene_2":
-		get_tree().change_scene("res://scenes/GUI/Main_menu.tscn")
+		get_tree().change_scene("res://scenes/thanks_for_playing.tscn")
 		pass
 	pass

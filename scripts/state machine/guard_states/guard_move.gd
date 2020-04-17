@@ -1,6 +1,6 @@
 extends "res://scripts/state machine/state.gd"
 
-var speed : float = 30.0
+var speed : float = 44.0
 
 func enter():
 	pass
@@ -12,9 +12,9 @@ func update(_delta : float):
 	set_animation()
 	steering(_delta)
 	
-	owner.velocity = owner.direction * speed
-	owner.velocity += owner.steering
-	owner.velocity = owner.move_and_slide(owner.velocity)
+	owner.velocity = owner.direction
+	owner.velocity += owner.steering * 1.5
+	owner.velocity = owner.move_and_slide(owner.velocity.normalized() * speed)
 	pass
 
 func set_animation():

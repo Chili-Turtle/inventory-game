@@ -4,7 +4,7 @@ var enable_presses : bool = false
 
 var bar_music = load("res://audio/music/bar_music_1.wav")
 
-var game_over = load("res://audio/music/game_over_1.wav")
+var game_over_music = load("res://audio/music/game_over_1.wav")
 
 func _on_root_scene_ready():
 	event_handler.emit_signal("game_loaded")
@@ -29,7 +29,6 @@ func _input(event):
 	if event is InputEventKey:
 		if event.scancode == KEY_R:
 			get_tree().reload_current_scene()
-			print("R")
 		if event.scancode == KEY_T:
 			get_tree().change_scene("res://scenes/GUI/Main_menu.tscn")
 			pass
@@ -41,8 +40,7 @@ func on_game_over():
 	$CanvasLayer/game_over/button_prompt.visible = true
 	Engine.time_scale = 0.5
 	$CanvasLayer/game_over/AnimationPlayer.play("fade_in")
-	
-	MM.play_music(game_over)
+	MM.play_music(game_over_music)
 	pass
 
 func on_update_sprint(value):

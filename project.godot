@@ -26,7 +26,8 @@ _global_script_class_icons={
 
 [application]
 
-config/name="inventory game"
+config/name="Ronja & Birk the thief siblings"
+config/description="You play as birk the older brother of the thief sieblings. You got cought by your daily thieving, now your sister is hold hostage and you have to work for a shady guy to get her back."
 run/main_scene="res://scenes/GUI/Main_menu.tscn"
 config/icon="res://icon.png"
 

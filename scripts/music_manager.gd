@@ -19,7 +19,6 @@ func play_music(music_clip):
 		
 		replay_player.set_stream_paused(false)
 		last_player = replay_player
-		print("true")
 	else:
 		#if I dont't have a player with the same stream set the stream /if not last_player
 		for player in  $music.get_children():

@@ -18,10 +18,10 @@ func _ready():
 	pass
 
 func _input(event):
-	if event.is_action_pressed("ui_down"):
-		MM.play_music(main_music_2)
-	if event.is_action_pressed("ui_up"):
-		MM.play_music(main_music_3)
+#	if event.is_action_pressed("ui_down"):
+#		MM.play_music(main_music_2)
+#	if event.is_action_pressed("ui_up"):
+#		MM.play_music(main_music_3)
 		pass
 
 
